@@ -1,0 +1,38 @@
+/*
+ * 黑色主题
+ */
+@charset "utf-8";
+
+h1,h2,h3,h4,h5,h6,strong{font-size:100%;font-weight:bold;}
+input,textarea,select{font-family:inherit;font-size:inherit;outline: none;font-weight:inherit}
+fieldset,img{border:0;vertical-align: middle;}
+li{list-style:none}
+ul{list-style:none}
+a{text-decoration:none;cursor: pointer;}
+.wrap{margin:0 auto;width:1200px;min-width:1000px;}
+.mtop{margin-top:10px;}
+
+.section{padding: 20px;background: #fff;box-shadow: 0px 1px 3px rgba(20, 20, 20, 0.1);}
+.section .title{height:30px;line-height:30px;border-bottom:1px dotted #ccc;font-size:14px;color:#333;position:relative;}
+.section .title .more{display:inline-block;font-size:12px;line-height:30px;font-weight:normal;color:#aaa;position:absolute;right:0px;font-family:SimSun;}
+.section .title .more:hover{color:#390;}
+.sub-category{font-weight:normal;font-size:12px;margin-left:30px;}
+.sub-category a{margin:0 1px;display:inline-block;padding:1px 5px;height:14px;line-height:14px;color:#666;border-radius:2px;transition: all 0.3s linear 0s;}
+.sub-category a.current,.sub-category a:hover{background:#47b902;color:#fff;}
+
+.action{float:right;font-size:12px;font-weight:normal;}
+.action a{color:#888;margin-left:10px;}
+.action a:hover{color:#333;}
+.content{padding:10px 0;}
+.gallery-list li{float:left;margin-bottom:10px;height:80px;border-top:0px solid #eee;position:relative;z-index:1;padding:5px;}
+.gallery-list li .img{float:left;padding:4px;border:1px solid #eee;background:#fff;text-align:center;position:relative;z-index:10;}
+.gallery-list li .img a{float:left;display:inline-block;max-height:80px;overflow:hidden;}
+.gallery-list li img{float:left;width:100%;}
+.gallery-list li .description{display:none;padding:5px;color:#fff;line-height:1.5em;background:#339900;position:absolute;left:0;top:0;}
+.gallery-list li .description h2{color:#fff;height:20px;overflow:hidden;font-size:14px;}
+.gallery-list li.active{z-index:100;}
+
+.time-list li a{color:#555;}
+.time-list li:hover a{background-color:transparent;color:#b61010;}
+.sub-category a.current, .sub-category a:hover {background: #850e06;}
+.gallery-list li .description {background: #393b3c;}

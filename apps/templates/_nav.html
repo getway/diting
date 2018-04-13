@@ -1,0 +1,35 @@
+{% load i18n %}
+<li id="index">
+    <a href="{% url 'index' %}">
+        <i class="fa fa-dashboard" style="width: 14px"></i> <span class="nav-label">{% trans 'Dashboard' %}</span><span
+            class="label label-info pull-right"></span>
+    </a>
+</li>
+<li id="users">
+    <a href="#">
+        <i class="fa fa-group" style="width: 14px"></i> <span class="nav-label">{% trans 'Users' %}</span><span class="fa arrow"></span>
+    </a>
+    <ul class="nav nav-second-level active">
+        <li id="user"><a href="{% url 'users:user-list' %}">{% trans 'User list' %}</a></li>
+        <li id="user-group"><a href="{% url 'users:user-group-list' %}">{% trans 'User group' %}</a></li>
+        <li id="login-log"><a href="{% url 'users:login-log-list' %}">{% trans 'Login logs' %}</a></li>
+    </ul>
+</li>
+<li id="navis">
+    <a>
+        <i class="fa fa-inbox" style="width: 14px"></i> <span class="nav-label">{% trans 'Navis' %}</span><span class="fa arrow"></span>
+    </a>
+    <ul class="nav nav-second-level">
+        <li id="navi"><a href="{% url 'navis:navi-list' %}">{% trans 'Navi list' %}</a></li>
+    </ul>
+</li>
+<li id="perms">
+    <a href="#"><i class="fa fa-edit" style="width: 14px"></i> <span class="nav-label">{% trans 'Perms' %}</span><span class="fa arrow"></span></a>
+
+</li>
+
+<li id="settings">
+    <a href="{% url 'settings:basic-setting' %}">
+        <i class="fa fa-gears"></i> <span class="nav-label">{% trans 'Settings' %}</span><span class="label label-info pull-right"></span>
+    </a>
+</li>

@@ -1,0 +1,59 @@
+{% extends 'base_no.html' %}
+{% load static %}
+{% block content %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>推荐工具</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="section mtop">
+                            <ul class="gallery-list clearfix" style="padding-left: 10px">
+                                {% for navi in navis %}
+                                <li>
+                                    <div class="img" style="width:120px"><a href="{{ navi.url }}" target="_blank" rel="nofollow"><img src="{{ navi.logo.url }}" width="100%" alt="{{ navi.name }}"></a></div>
+                                    <div class="description" style="padding-top: 79px; display: none; width:130px"><h2>{{ navi.name }}</h2><p>{{ navi.description }}</p></div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block custom_foot_js %}
+
+<script type="text/javascript">
+$(function(){
+	$('.gallery-list .img').hover(function(){
+		var height = $(this).outerHeight()+10;
+		$(this).parent().addClass('active');
+		$(this).next('.description').css('padding-top',height).stop(true,true).fadeIn();
+	},function(){ $(this).next('.description').stop(true,true).fadeOut('fast',function(){ $(this).parent().removeClass('active');});});
+	$('.gallery-list a').click(function(){
+		var href = $(this).attr('href');
+		countClick(href);
+	})
+})
+
+</script>
+
+{% endblock %}

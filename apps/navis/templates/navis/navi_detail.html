@@ -1,0 +1,347 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block custom_head_css_js %}
+    <link href="{% static 'css/plugins/select2/select2.min.css' %}" rel="stylesheet">
+    <link href="{% static "css/plugins/sweetalert/sweetalert.css" %}" rel="stylesheet">
+    <script src="{% static 'js/plugins/select2/select2.full.min.js' %}"></script>
+    <script src="{% static "js/plugins/sweetalert/sweetalert.min.js" %}"></script>
+{% endblock %}
+{% block content %}
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="panel-options">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="{% url 'navis:navi-detail' pk=navi_object.id %}" class="text-center"><i class="fa fa-laptop"></i> {% trans 'User detail' %} </a>
+                            </li>
+
+                            <li class="pull-right">
+                                <a class="btn btn-outline btn-default" href="{% url 'navis:navi-update' pk=navi_object.id %}"><i class="fa fa-edit"></i>{% trans 'Update' %}</a>
+                            </li>
+
+                            <li class="pull-right">
+                                <a class="btn btn-outline {% if request.user != "admin" %} btn-danger btn-delete-user {% else %} disabled {% endif %}">
+                                    <i class="fa fa-trash-o"></i>{% trans 'Delete' %}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="tab-content">
+                        <div class="col-sm-8" style="padding-left: 0">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <span class="label"><b>{{ navi_object.name }}</b></span>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                            <i class="fa fa-wrench"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-user">
+                                        </ul>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr class="no-borders-tr">
+                                            <td colspan="2">
+                                                <img src="{{ navi_object.logo.url }}" class="img-circle" width="64" height="64">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%">{% trans 'Name' %}:</td>
+                                            <td><b>{{ navi_object.name }}</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>{% trans 'Logo' %}:</td>
+                                            <td><b>{{ navi_object.logo }}</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>{% trans 'Url' %}:</td>
+                                            <td><b>{{ navi_object.url }}</b></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>{% trans 'Created by' %}:</td>
+                                            <td><b>{{ navi_object.created_by }}</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>{% trans 'Date joined' %}:</td>
+                                            <td><b>{{ navi_object.date_created|date:"Y-m-j H:i:s" }}</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>{% trans 'Last updated' %}:</td>
+                                            <td><b>{{ navi_object.date_updated|date:"Y-m-j H:i:s" }}</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>{% trans 'Comment' %}:</td>
+                                            <td><b>{{ navi_object.description }}</b></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" style="padding-left: 0;padding-right: 0">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <i class="fa fa-info-circle"></i> {% trans 'Grant User' %}
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table user_edit">
+                                        <tbody>
+                                        <form>
+                                            <tr>
+                                                <td colspan="2" class="no-borders">
+                                                    <select data-placeholder="{% trans 'Join user' %}" id="users_selected" class="select2" style="width: 100%" multiple="" tabindex="4">
+                                                        {% for user in users %}
+                                                        <option value="{{ user.id }}" id="opt_{{ user.id }}" >{{ user.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" class="no-borders">
+                                                    <button type="button" class="btn btn-info btn-small" id="btn_join_user">{% trans 'Join' %}</button>
+                                                </td>
+                                            </tr>
+                                        </form>
+
+                                        {% for user in navi_object.users.all %}
+                                        <tr>
+                                          <td >
+                                              <b class="bdg_user" data-gid={{ user.id }}>{{ user.name }}</b>
+                                          </td>
+                                          <td>
+                                              <button class="btn btn-danger pull-right btn-xs btn_leave_user" type="button"><i class="fa fa-minus"></i></button>
+                                          </td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <i class="fa fa-info-circle"></i> {% trans 'Grant user group' %}
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table group_edit">
+                                        <tbody>
+                                        <form>
+                                            <tr>
+                                                <td colspan="2" class="no-borders">
+                                                    <select data-placeholder="{% trans 'Grant user groups' %}" id="groups_selected" class="select2" style="width: 100%" multiple="" tabindex="4">
+                                                        {% for group in groups %}
+                                                        <option value="{{ group.id }}" id="opt_{{ group.id }}" >{{ group.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" class="no-borders">
+                                                    <button type="button" class="btn btn-info btn-small" id="btn_join_group">{% trans 'Join' %}</button>
+                                                </td>
+                                            </tr>
+                                        </form>
+
+                                        {% for group in navi_object.groups.all %}
+                                        <tr>
+                                          <td >
+                                              <b class="bdg_group" data-gid={{ group.id }}>{{ group.name }}</b>
+                                          </td>
+                                          <td>
+                                              <button class="btn btn-danger pull-right btn-xs btn_leave_group" type="button"><i class="fa fa-minus"></i></button>
+                                          </td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block custom_foot_js %}
+<script>
+jumpserver.nodes_selected = {};
+
+function updateUsers(users) {
+    var the_url = "{% url 'api-navis:navi-update-user' pk=navi_object.id %}";
+    var body = {
+        users: Object.assign([], users)
+    };
+    var success = function(data) {
+        // remove all the selected groups from select > option and rendered ul element;
+        $('.select2-selection__rendered').empty();
+        $('#users_selected').val('');
+        $.map(jumpserver.nodes_selected, function(user_name, index) {
+            $('#opt_' + index).remove();
+            // change tr html of user.
+            $('.user_edit tbody').append(
+                '<tr>' +
+                '<td><b class="bdg_user" data-gid="' + index + '">' + user_name + '</b></td>' +
+                '<td><button class="btn btn-danger btn-xs pull-right btn_leave_user" type="button"><i class="fa fa-minus"></i></button></td>' +
+                '</tr>'
+            )
+        });
+        // clear jumpserver.groups_selected
+        jumpserver.nodes_selected = {};
+    };
+    APIUpdateAttr({
+        url: the_url,
+        body: JSON.stringify(body),
+        success: success
+    });
+}
+
+function updateUserGroups(groups) {
+    var the_url = "{% url 'api-navis:navi-update-group' pk=navi_object.id %}";
+    var body = {
+        groups: Object.assign([], groups)
+    };
+    var success = function(data) {
+        // remove all the selected groups from select > option and rendered ul element;
+        $('.select2-selection__rendered').empty();
+        $('#groups_selected').val('');
+        $.map(jumpserver.nodes_selected, function(group_name, index) {
+            $('#opt_' + index).remove();
+            // change tr html of user groups.
+            $('.group_edit tbody').append(
+                '<tr>' +
+                '<td><b class="bdg_group" data-gid="' + index + '">' + group_name + '</b></td>' +
+                '<td><button class="btn btn-danger btn-xs pull-right btn_leave_group" type="button"><i class="fa fa-minus"></i></button></td>' +
+                '</tr>'
+            )
+        });
+        // clear jumpserver.groups_selected
+        jumpserver.nodes_selected = {};
+    };
+    APIUpdateAttr({
+        url: the_url,
+        body: JSON.stringify(body),
+        success: success
+    });
+}
+
+$(document).ready(function() {
+    $('.select2').select2()
+        .on('select2:select', function(evt) {
+            var data = evt.params.data;
+            jumpserver.nodes_selected[data.id] = data.text;
+        })
+        .on('select2:unselect', function(evt) {
+            var data = evt.params.data;
+            delete jumpserver.nodes_selected[data.id];
+        })
+})
+
+
+
+
+
+.on('click', '#is_active', function() {
+    var the_url = "{% url 'api-navis:navi-detail' pk=navi_object.id %}";
+    var checked = $(this).prop('checked');
+    var body = {
+        'is_active': checked
+    };
+    var success = '{% trans "Update successfully!" %}';
+    APIUpdateAttr({
+        url: the_url,
+        body: JSON.stringify(body),
+        success_message: success
+    });
+})
+
+
+
+
+.on('click', '#btn_join_user', function() {
+    if (Object.keys(jumpserver.nodes_selected).length === 0) {
+        return false;
+    }
+    var users = $('.bdg_user').map(function() {
+        return $(this).data('gid');
+    }).get();
+    $.map(jumpserver.nodes_selected, function(value, index) {
+        users.push(index);
+        $('#opt_' + index).remove();
+    });
+    updateUsers(users)
+}).on('click', '.btn_leave_user', function() {
+    var $this = $(this);
+    var $tr = $this.closest('tr');
+    var $badge = $tr.find('.bdg_user');
+    var gid = $badge.data('gid');
+    var user = $badge.html() || $badge.text();
+    $('#users_selected').append(
+        '<option value="' + gid + '" id="opt_' + gid + '">' + user + '</option>'
+    );
+    $tr.remove();
+    var users = $('.bdg_user').map(function() {
+        return $(this).data('gid');
+    }).get();
+    updateUsers(users)
+})
+
+
+
+
+
+
+
+.on('click', '#btn_join_group', function() {
+    if (Object.keys(jumpserver.nodes_selected).length === 0) {
+        return false;
+    }
+    var groups = $('.bdg_group').map(function() {
+        return $(this).data('gid');
+    }).get();
+    $.map(jumpserver.nodes_selected, function(value, index) {
+        groups.push(index);
+        $('#opt_' + index).remove();
+    });
+    updateUserGroups(groups)
+})
+.on('click', '.btn_leave_group', function() {
+    var $this = $(this);
+    var $tr = $this.closest('tr');
+    var $badge = $tr.find('.bdg_group');
+    var gid = $badge.data('gid');
+    var group_name = $badge.html() || $badge.text();
+    $('#groups_selected').append(
+        '<option value="' + gid + '" id="opt_' + gid + '">' + group_name + '</option>'
+    );
+    $tr.remove();
+    var groups = $('.bdg_group').map(function() {
+        return $(this).data('gid');
+    }).get();
+    updateUserGroups(groups)
+})
+
+.on('click', '.btn-delete-user', function () {
+    var $this = $(this);
+    var name = "{{ navi_object.name }}";
+    var uid = "{{ navi_object.id }}";
+    var the_url = '{% url "api-navis:navi-detail" pk=DEFAULT_PK %}'.replace('{{ DEFAULT_PK }}', uid);
+    var redirect_url = "{% url 'navis:navi-list' %}";
+    objectDelete($this, name, the_url, redirect_url);
+})
+</script>
+{% endblock %}
