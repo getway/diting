@@ -1,8 +1,8 @@
 """
-    jumpserver.config
+    diting.config
     ~~~~~~~~~~~~~~~~~
 
-    Jumpserver project setting file
+    Diting project setting file
 
     :copyright: (c) 2014-2017 by Jumpserver Team
     :license: GPL v2, see LICENSE for more details.
