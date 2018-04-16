@@ -7,6 +7,8 @@ from captcha.fields import CaptchaField
 
 from common.utils import validate_ssh_public_key
 from .models import User, UserGroup
+from django.conf import settings
+from common.ldapadmin import LDAPTool
 
 
 class UserLoginForm(AuthenticationForm):
@@ -76,11 +78,9 @@ class UserCreateUpdateForm(forms.ModelForm):
             user.public_key = public_key
             user.save()
         #ldap用户
-        from django.conf import settings
-        from common.ldapadmin import LDAPTool
-        ldap_tool = LDAPTool()
         username = user.username
         if settings.AUTH_LDAP:
+            ldap_tool = LDAPTool()
             check_user_code = ldap_tool.check_user_status(username)
             print("is ldap:%s" % is_ldap_user)
             if is_ldap_user and check_user_code == 404:
@@ -133,9 +133,6 @@ class UserPasswordForm(forms.Form):
 
     def clean_old_password(self):
         old_password = self.cleaned_data['old_password']
-        from django.conf import settings
-        from common.ldapadmin import LDAPTool
-        old_password = self.cleaned_data['old_password']
         if settings.AUTH_LDAP:
             # 使用LDAP验证时
             ldap_tool = LDAPTool()
@@ -155,8 +152,6 @@ class UserPasswordForm(forms.Form):
         return confirm_password
 
     def save(self):
-        from django.conf import settings
-        from common.ldapadmin import LDAPTool
         ldap_tool = LDAPTool()
         username = self.instance.username
         password = self.cleaned_data['new_password']

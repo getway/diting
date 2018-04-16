@@ -182,12 +182,13 @@ class UserResetPasswordView(TemplateView):
 
         # 重置LDAP用户密码
         from django.conf import settings
-        from common.ldapadmin import LDAPTool
-        ldap_tool = LDAPTool()
-        username = user.username
-        status = ldap_tool.ldap_update_password(username, new_password=password)
-        if status:
-            print("ldap用户:%s 密码修改成功" % username)
+        if settings.AUTH_LDAP:
+            from common.ldapadmin import LDAPTool
+            ldap_tool = LDAPTool()
+            username = user.username
+            status = ldap_tool.ldap_update_password(username, new_password=password)
+            if status:
+                print("ldap用户:%s 密码修改成功" % username)
         return HttpResponseRedirect(reverse('users:reset-password-success'))
 
 
