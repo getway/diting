@@ -8,3 +8,4 @@ django.db
 celerybeat.pid
 apps/__pycache__/
 apps/static/ionicons/
+*.pyc
