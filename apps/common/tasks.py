@@ -1,13 +1,13 @@
 from django.core.mail import send_mail
 from django.conf import settings
-from celery import shared_task
+# from celery import shared_task
 from .utils import get_logger
 
 
 logger = get_logger(__file__)
 
 
-@shared_task
+# @shared_task
 def send_mail_async(*args, **kwargs):
     """ Using celery to send email async
 
