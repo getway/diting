@@ -1,7 +1,6 @@
 .git
 .idea/
 logs/*.log
-data/*
 .github
 tmp/*
 django.db
@@ -9,3 +8,4 @@ celerybeat.pid
 apps/__pycache__/
 apps/static/ionicons/
 *.pyc
+data/*
