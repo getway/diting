@@ -179,6 +179,15 @@ class UserResetPasswordView(TemplateView):
             return self.get(request, errors=_('Token invalid or expired'))
 
         user.reset_password(password)
+
+        # 重置LDAP用户密码
+        from django.conf import settings
+        from common.ldapadmin import LDAPTool
+        ldap_tool = LDAPTool()
+        username = user.username
+        status = ldap_tool.ldap_update_password(username, new_password=password)
+        if status:
+            print("ldap用户:%s 密码修改成功" % username)
         return HttpResponseRedirect(reverse('users:reset-password-success'))
 
 

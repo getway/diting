@@ -30,6 +30,7 @@ class UserCreateUpdateForm(forms.ModelForm):
         widget=forms.Textarea(attrs={'placeholder': _('ssh-rsa AAAA...')}),
         help_text=_('Paste user id_rsa.pub here.')
     )
+    is_ldap_user = forms.BooleanField(required=False, label="is ldap")
 
     class Meta:
         model = User
@@ -66,6 +67,7 @@ class UserCreateUpdateForm(forms.ModelForm):
     def save(self, commit=True):
         password = self.cleaned_data.get('password')
         public_key = self.cleaned_data.get('public_key')
+        is_ldap_user = self.cleaned_data.get('is_ldap_user')
         user = super().save(commit=commit)
         if password:
             user.set_password(password)
@@ -73,6 +75,22 @@ class UserCreateUpdateForm(forms.ModelForm):
         if public_key:
             user.public_key = public_key
             user.save()
+        #ldap用户
+        from django.conf import settings
+        from common.ldapadmin import LDAPTool
+        ldap_tool = LDAPTool()
+        username = user.username
+        if settings.AUTH_LDAP:
+            check_user_code = ldap_tool.check_user_status(username)
+            print("is ldap:%s" % is_ldap_user)
+            if is_ldap_user and check_user_code == 404:
+                print("新增用户，类型为ldap")
+                cn = user.username
+                mail = user.email
+                password = password
+                status = ldap_tool.ldap_add_user(cn, mail, username, password)
+                if status:
+                    return user
         return user
 
 
@@ -115,6 +133,15 @@ class UserPasswordForm(forms.Form):
 
     def clean_old_password(self):
         old_password = self.cleaned_data['old_password']
+        from django.conf import settings
+        from common.ldapadmin import LDAPTool
+        old_password = self.cleaned_data['old_password']
+        if settings.AUTH_LDAP:
+            # 使用LDAP验证时
+            ldap_tool = LDAPTool()
+            username = self.instance.username
+            if ldap_tool.ldap_get_vaild(uid=username, passwd=old_password):
+                return old_password
         if not self.instance.check_password(old_password):
             raise forms.ValidationError(_('Old password error'))
         return old_password
@@ -128,9 +155,21 @@ class UserPasswordForm(forms.Form):
         return confirm_password
 
     def save(self):
+        from django.conf import settings
+        from common.ldapadmin import LDAPTool
+        ldap_tool = LDAPTool()
+        username = self.instance.username
         password = self.cleaned_data['new_password']
         self.instance.set_password(password)
         self.instance.save()
+        # ldap用户
+        if settings.AUTH_LDAP:
+            check_user_code = ldap_tool.check_user_status(username)
+            if check_user_code != 404:
+                print("ldap用户:%s" % username)
+                status = ldap_tool.ldap_update_password(username, new_password=password)
+                if status:
+                    return self.instance
         return self.instance
 
 

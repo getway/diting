@@ -6,6 +6,5 @@ data/*
 tmp/*
 django.db
 celerybeat.pid
-/data/db.sqlite3
 apps/__pycache__/
 apps/static/ionicons/
