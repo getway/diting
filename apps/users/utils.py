@@ -64,7 +64,8 @@ def send_user_created_mail(user):
         except OSError:
             pass
 
-    send_mail_async.delay(subject, message, recipient_list, html_message=message)
+    # send_mail_async.delay(subject, message, recipient_list, html_message=message)
+    send_mail_async(subject, message, recipient_list, html_message=message)
 
 
 def send_reset_password_mail(user):
@@ -97,7 +98,8 @@ def send_reset_password_mail(user):
     if settings.DEBUG:
         logger.debug(message)
 
-    send_mail_async.delay(subject, message, recipient_list, html_message=message)
+    # send_mail_async.delay(subject, message, recipient_list, html_message=message)
+    send_mail_async(subject, message, recipient_list, html_message=message)
 
 
 def send_reset_ssh_key_mail(user):
@@ -119,7 +121,8 @@ def send_reset_ssh_key_mail(user):
     if settings.DEBUG:
         logger.debug(message)
 
-    send_mail_async.delay(subject, message, recipient_list, html_message=message)
+    # send_mail_async.delay(subject, message, recipient_list, html_message=message)
+    send_mail_async(subject, message, recipient_list, html_message=message)
 
 
 def check_user_valid(**kwargs):
