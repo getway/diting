@@ -1,1 +1,0 @@
-INSERT INTO users_user VALUES('pbkdf2_sha256$36000$yhYWUEo4DNqj$SpxtdIOm9nwRG+X76jUUlGvdDcLaMBl7Z+rJ8sfSMcU=',NULL,'','',1,'2017-12-12 08:13:20.827000','61c39c1f5b5742688180b6dda235aadd','admin','Administrator','admin@jumpserver.org','Admin','','',NULL,0,'','','','Administrator is the super user of system',0,'2087-11-25 08:13:20.827000','System');
