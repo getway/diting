@@ -1,7 +1,6 @@
 .git
 .idea/
 logs/*.log
-data/*
 .github
 tmp/*
 django.db
