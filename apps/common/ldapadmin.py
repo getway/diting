@@ -10,6 +10,7 @@ import ldap
 import ldap.modlist as modlist
 import logging
 from django.conf import settings
+from passlib.hash import ldap_salted_sha1 as ssha
 
 
 logger = logging.getLogger()
@@ -22,6 +23,11 @@ LDAP_USER = settings.AUTH_LDAP_BIND_DN
 LDAP_PASS = settings.AUTH_LDAP_BIND_PASSWORD
 # 默认 区域
 BASE_DN = settings.AUTH_LDAP_SEARCH_OU
+
+
+def pass_encrypt(passwd):
+    return ssha.encrypt(passwd, salt_size=16)
+
 
 class LDAPTool(object):
     def __init__(self,
@@ -262,12 +268,13 @@ class LDAPTool(object):
             obj = self.ldapconn
             obj.protocal_version = ldap.VERSION3
             modifyDN = "uid=%s,%s" % (uid, BASE_DN)
+            new_password_encrypt = pass_encrypt(new_password)
             #有old_password情况下
             if old_password:
-                obj.passwd_s(modifyDN, [str(old_password)], [str(new_password)])
+                obj.passwd_s(modifyDN, [str(old_password).encode('utf-8')], [new_password_encrypt.encode('utf-8')])
                 result = True
             else:
-                obj.modify_s(modifyDN, [(ldap.MOD_REPLACE, 'userPassword', [str(new_password).encode('utf-8')])])
+                obj.modify_s(modifyDN, [(ldap.MOD_REPLACE, 'userPassword', [new_password_encrypt.encode('utf-8')])])
                 result = True
             obj.unbind_s()
         except ldap.LDAPError as e:

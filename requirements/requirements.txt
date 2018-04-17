@@ -12,3 +12,4 @@ itsdangerous==0.24
 django-formtools==2.1
 djangorestframework-bulk==0.2.1
 django-redis-cache==1.7.1
+passlib
