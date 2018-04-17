@@ -282,6 +282,27 @@ class LDAPTool(object):
             return False
         return result
 
+    def ldap_update_user(self, uid, old, new):
+        """
+        修改dap用户
+        :param uid: 用户名
+        :param old: 原属性 {'mail': ['admin@example.com']}
+        :param new  新属性 {'mail': ['root@example.com']}
+        :return: True/None
+        """
+        result = None
+        try:
+            obj = self.ldapconn
+            obj.protocal_version = ldap.VERSION3
+            dn = "uid=%s,%s" % (uid, BASE_DN)
+            ldif = modlist.modifyModlist(old, new)
+            obj.modify_s(dn, ldif)
+            obj.unbind_s()
+            result = True
+        except ldap.LDAPError as e:
+            logger.error("修改用户%s 失败，原因为: %s" % (uid, str(e)))
+        return result
+
 
 def main():
     # ldap = LDAPTool()
