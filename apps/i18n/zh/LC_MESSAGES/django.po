@@ -1429,18 +1429,14 @@ msgid "Url"
 msgstr ""
 
 #: navis/templates/navis/navi_detail.html:82
-#, fuzzy
-#| msgid "Password update"
 msgid "Last updated"
-msgstr "密码更新"
+msgstr "最后更新"
 
 #: navis/templates/navis/navi_detail.html:97
 msgid "Grant User"
 msgstr "授权用户"
 
 #: navis/templates/navis/navi_detail.html:105
-#, fuzzy
-#| msgid "Admin user"
 msgid "Join user"
 msgstr "增加用户"
 
@@ -1452,14 +1448,10 @@ msgid "Join"
 msgstr "加入"
 
 #: navis/templates/navis/navi_detail.html:136
-#, fuzzy
-#| msgid "Create user group"
 msgid "Grant user group"
 msgstr "授权用户组"
 
 #: navis/templates/navis/navi_detail.html:144
-#, fuzzy
-#| msgid "Create user group"
 msgid "Grant user groups"
 msgstr "授权用户组"
 
@@ -1800,8 +1792,6 @@ msgid "Asset permission"
 msgstr "资产授权"
 
 #: perms/models.py:119
-#, fuzzy
-#| msgid "Create permission"
 msgid "Navi permission"
 msgstr "创建授权规则"
 
