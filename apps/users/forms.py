@@ -269,13 +269,13 @@ class UserPasswordForm(forms.Form):
         return confirm_password
 
     def save(self):
-        ldap_tool = LDAPTool()
         username = self.instance.username
         password = self.cleaned_data['new_password']
         self.instance.set_password(password)
         self.instance.save()
         # ldap用户
         if settings.AUTH_LDAP and self.instance.is_ldap_user:
+            ldap_tool = LDAPTool()
             status = ldap_tool.ldap_update_password(username, new_password=password)
             if status:
                 return self.instance
