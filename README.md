@@ -12,8 +12,8 @@
 * 支持接入开源没有账户体系的系统
 * 其他
 
-欢迎有兴趣的同学一起开发，联系我：
-xiaomaoxue@gmail.com
+欢迎有兴趣的同学一起开发，这里感谢[Jumpserver](https://github.com/jumpserver/)这么好的项目，借用了框架。
+
 
 
 [![运维导航](docs/_static/img/navi.png)](https://www.python.org/)
