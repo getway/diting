@@ -382,7 +382,7 @@ class TeeObj:
         self.file_obj.close()
 
 
-def generate_activation_code(len=20, n=200):
+def generate_activation_code(len=20, n=20):
     '''生成n个长度为len的随机序列码'''
     random.seed()
     chars = string.ascii_letters + string.digits

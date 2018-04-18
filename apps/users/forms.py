@@ -163,7 +163,7 @@ class UserCreateUpdateForm(forms.ModelForm):
                 if password:
                     password = password
                 else:
-                    password = generate_activation_code()
+                    password = generate_activation_code(n=1)[0]
                 status = ldap_tool.ldap_add_user(cn, mail, username, password)
                 if status:
                     msg = "ldap用户创建成功"

@@ -9,3 +9,4 @@ apps/__pycache__/
 apps/static/ionicons/
 *.pyc
 data/*
+config.py
