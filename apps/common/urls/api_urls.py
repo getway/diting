@@ -9,5 +9,6 @@ app_name = 'common'
 urlpatterns = [
     url(r'^v1/mail/testing/$', api.MailTestingAPI.as_view(), name='mail-testing'),
     url(r'^v1/ldap/testing/$', api.LDAPTestingAPI.as_view(), name='ldap-testing'),
+    # url(r'^v1/ldap/list/$', api.LDAPUserListAPI.as_view(), name='ldap-list'),
     url(r'^v1/django-settings/$', api.DjangoSettingsAPI.as_view(), name='django-settings'),
 ]

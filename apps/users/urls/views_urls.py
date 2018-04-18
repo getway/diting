@@ -24,6 +24,7 @@ urlpatterns = [
 
     # User view
     url(r'^user$', views.UserListView.as_view(), name='user-list'),
+    # url(r'^ldap-user$', views.LDAPUserListView.as_view(), name='ldap-user-list'),
     url(r'^user/export/', views.UserExportView.as_view(), name='user-export'),
     url(r'^first-login/$', views.UserFirstLoginView.as_view(), name='user-first-login'),
     url(r'^user/import/$', views.UserBulkImportView.as_view(), name='user-import'),

@@ -2,7 +2,6 @@
 
 from __future__ import unicode_literals
 import os
-from django import forms
 from django.shortcuts import render
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -20,8 +19,6 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from formtools.wizard.views import SessionWizardView
 from django.conf import settings
-from django.utils import timezone
-
 from common.utils import get_object_or_none
 from common.mixins import DatetimeSearchMixin
 from ..models import User, LoginLog
@@ -74,8 +71,8 @@ class UserLoginView(FormView):
         return redirect(self.get_success_url())
 
     def get_success_url(self):
-        if self.request.user.is_first_login:
-            return reverse('users:user-first-login')
+        # if self.request.user.is_first_login:
+        #     return reverse('users:user-first-login')
 
         return self.request.POST.get(
             self.redirect_field_name,
@@ -178,17 +175,19 @@ class UserResetPasswordView(TemplateView):
         if not user:
             return self.get(request, errors=_('Token invalid or expired'))
 
-        user.reset_password(password)
-
         # 重置LDAP用户密码
         from django.conf import settings
-        if settings.AUTH_LDAP:
+        if settings.AUTH_LDAP and user.is_ldap_user:
             from common.ldapadmin import LDAPTool
             ldap_tool = LDAPTool()
             username = user.username
             status = ldap_tool.ldap_update_password(username, new_password=password)
             if status:
                 print("ldap用户:%s 密码修改成功" % username)
+            else:
+                return self.get(request, errors="密码更新失败，可能是弱类型")
+        else:
+            user.reset_password(password)
         return HttpResponseRedirect(reverse('users:reset-password-success'))
 
 
@@ -200,7 +199,7 @@ class UserFirstLoginView(LoginRequiredMixin, SessionWizardView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated() and not request.user.is_first_login:
             return redirect(reverse('index'))
-        return super().dispatch(request, *args, **kwargs)
+        return super(UserFirstLoginView, self).dispatch(request, *args, **kwargs)
 
     def done(self, form_list, **kwargs):
         user = self.request.user
@@ -219,7 +218,7 @@ class UserFirstLoginView(LoginRequiredMixin, SessionWizardView):
         return render(self.request, 'users/first_login_done.html', context)
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(UserFirstLoginView, self).get_context_data(**kwargs)
         context.update({'app': _('Users'), 'action': _('First login')})
         return context
 
@@ -233,10 +232,10 @@ class UserFirstLoginView(LoginRequiredMixin, SessionWizardView):
                 'wechat': user.wechat or '',
                 'phone': user.phone or ''
             }
-        return super().get_form_initial(step)
+        return super(UserFirstLoginView, self).get_form_initial(step)
 
     def get_form(self, step=None, data=None, files=None):
-        form = super().get_form(step, data, files)
+        form = super(UserFirstLoginView, self).get_form(step, data, files)
 
         form.instance = self.request.user
         return form

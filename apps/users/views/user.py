@@ -45,10 +45,24 @@ __all__ = [
     'UserExportView',  'UserBulkImportView', 'UserProfileView',
     'UserProfileUpdateView', 'UserPasswordUpdateView',
     'UserPublicKeyUpdateView', 'UserBulkUpdateView',
-    'UserPublicKeyGenerateView',
+    'UserPublicKeyGenerateView', 'LDAPUserListView',
 ]
 
 logger = get_logger(__name__)
+
+
+class LDAPUserListView(AdminUserRequiredMixin, TemplateView):
+    template_name = 'users/ldap_user_list.html'
+
+    def get_context_data(self, **kwargs):
+        from common.ldapadmin import LDAPTool
+        LDAPTool
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'app': _('Users'),
+            'action': _('LDAP User list'),
+        })
+        return context
 
 
 class UserListView(AdminUserRequiredMixin, TemplateView):
@@ -81,10 +95,15 @@ class UserCreateView(AdminUserRequiredMixin, SuccessMessageMixin, CreateView):
         user.save()
         return super().form_valid(form)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
 
 class UserUpdateView(AdminUserRequiredMixin, SuccessMessageMixin, UpdateView):
     model = User
-    form_class = forms.UserCreateUpdateForm
+    form_class = forms.UserUpdateForm
     template_name = 'users/user_update.html'
     context_object_name = 'user_object'
     success_url = reverse_lazy('users:user-list')
@@ -320,7 +339,7 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         return super().get_context_data(**kwargs)
 
 
-class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
+class UserProfileUpdateView(LoginRequiredMixin, UpdateView, FormMixin):
     template_name = 'users/user_profile_update.html'
     model = User
     form_class = forms.UserProfileForm
@@ -336,6 +355,11 @@ class UserProfileUpdateView(LoginRequiredMixin, UpdateView):
         }
         kwargs.update(context)
         return super().get_context_data(**kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super(UserProfileUpdateView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
 
 class UserPasswordUpdateView(LoginRequiredMixin, UpdateView):

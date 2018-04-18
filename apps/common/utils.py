@@ -24,6 +24,8 @@ from itsdangerous import TimedJSONWebSignatureSerializer, JSONWebSignatureSerial
 from django.shortcuts import reverse as dj_reverse
 from django.conf import settings
 from django.utils import timezone
+import random
+import string
 
 
 UUID_PATTERN = re.compile(r'[0-9a-zA-Z\-]{36}')
@@ -378,3 +380,10 @@ class TeeObj:
 
     def close(self):
         self.file_obj.close()
+
+
+def generate_activation_code(len=20, n=200):
+    '''生成n个长度为len的随机序列码'''
+    random.seed()
+    chars = string.ascii_letters + string.digits
+    return [''.join([random.choice(chars) for _ in range(len)]) for _ in range(n)]

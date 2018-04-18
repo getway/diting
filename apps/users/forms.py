@@ -5,10 +5,11 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import gettext_lazy as _
 from captcha.fields import CaptchaField
 
-from common.utils import validate_ssh_public_key
+from common.utils import validate_ssh_public_key, generate_activation_code
 from .models import User, UserGroup
 from django.conf import settings
 from common.ldapadmin import LDAPTool
+from django.contrib import messages
 
 
 class UserLoginForm(AuthenticationForm):
@@ -20,7 +21,86 @@ class UserLoginForm(AuthenticationForm):
     captcha = CaptchaField()
 
 
+class UserUpdateForm(forms.ModelForm):
+    role_choices = ((i, n) for i, n in User.ROLE_CHOICES if i != User.ROLE_APP)
+    password = forms.CharField(
+        label=_('Password'), widget=forms.PasswordInput,
+        max_length=128, strip=False, required=False,
+    )
+    role = forms.ChoiceField(choices=role_choices, required=True, initial=User.ROLE_USER, label=_("Role"))
+    public_key = forms.CharField(
+        label=_('ssh public key'), max_length=5000, required=False,
+        widget=forms.Textarea(attrs={'placeholder': _('ssh-rsa AAAA...')}),
+        help_text=_('Paste user id_rsa.pub here.')
+    )
+
+    class Meta:
+        model = User
+        fields = [
+            'username', 'is_ldap_user', 'name', 'email', 'groups', 'wechat',
+            'phone', 'role', 'date_expired', 'comment',
+        ]
+        help_texts = {
+            'username': '* required',
+            'name': '* required',
+            'email': '* required',
+        }
+        widgets = {
+            'groups': forms.SelectMultiple(
+                attrs={
+                    'class': 'select2',
+                    'data-placeholder': _('Join user groups')
+                }
+            ),
+        }
+
+    def clean_public_key(self):
+        public_key = self.cleaned_data['public_key']
+        if not public_key:
+            return public_key
+        if self.instance.public_key and public_key == self.instance.public_key:
+            msg = _('Public key should not be the same as your old one.')
+            raise forms.ValidationError(msg)
+
+        if not validate_ssh_public_key(public_key):
+            raise forms.ValidationError(_('Not a valid ssh public key'))
+        return public_key
+
+    def save(self, commit=True):
+        password = self.cleaned_data.get('password')
+        public_key = self.cleaned_data.get('public_key')
+        user = super().save(commit=commit)
+
+        is_ldap_user = user.is_ldap_user
+        # ldap用户
+        username = user.username
+        if settings.AUTH_LDAP:
+            ldap_tool = LDAPTool()
+            check_user_code, data = ldap_tool.check_user_status(username)
+            if is_ldap_user and check_user_code == 200:
+                print("更新用户，类型为ldap")
+                old = {'mail': data[1].get('mail', ''), 'mobile': data[1].get('mobile', '')}
+                new = {'mail': [user.email.encode('utf-8')], 'mobile': [user.phone.encode('utf-8')],}
+                status = ldap_tool.ldap_update_user(username, old, new)
+                if status:
+                    return user
+        # #本地用户
+        if password and not is_ldap_user:
+            user.set_password(password)
+            user.save()
+        if public_key:
+            user.public_key = public_key
+            user.save()
+        return user
+
+
 class UserCreateUpdateForm(forms.ModelForm):
+    def __init__(self, request, *args, **kwargs):
+        # 如果需要额外接收参数，要重写构造器函数
+        # 这里额外接收一个参数，用于从request.sesssion中提取之前保存的验证码
+        super().__init__(*args, **kwargs)
+        self.request = request
+
     role_choices = ((i, n) for i, n in User.ROLE_CHOICES if i != User.ROLE_APP)
     password = forms.CharField(
         label=_('Password'), widget=forms.PasswordInput,
@@ -37,7 +117,7 @@ class UserCreateUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            'username', 'name', 'email', 'groups', 'wechat',
+            'username', 'is_ldap_user', 'name', 'email', 'groups', 'wechat',
             'phone', 'role', 'date_expired', 'comment',
         ]
         help_texts = {
@@ -71,30 +151,44 @@ class UserCreateUpdateForm(forms.ModelForm):
         public_key = self.cleaned_data.get('public_key')
         is_ldap_user = self.cleaned_data.get('is_ldap_user')
         user = super().save(commit=commit)
-        if password:
+        # ldap用户
+        username = user.username
+        if settings.AUTH_LDAP:
+            ldap_tool = LDAPTool()
+            check_user_code,_ = ldap_tool.check_user_status(username)
+            if is_ldap_user and check_user_code == 404:
+                print("新增用户，类型为ldap")
+                cn = user.username
+                mail = user.email
+                if password:
+                    password = password
+                else:
+                    password = generate_activation_code()
+                status = ldap_tool.ldap_add_user(cn, mail, username, password)
+                if status:
+                    msg = "ldap用户创建成功"
+                    messages.add_message(self.request, messages.SUCCESS, msg)
+                    return user
+                else:
+                    msg = "ldap用户创建失败"
+                    messages.add_message(self.request, messages.ERROR, msg)
+        #本地用户
+        if password and not is_ldap_user:
             user.set_password(password)
             user.save()
         if public_key:
             user.public_key = public_key
             user.save()
-        #ldap用户
-        username = user.username
-        if settings.AUTH_LDAP:
-            ldap_tool = LDAPTool()
-            check_user_code = ldap_tool.check_user_status(username)
-            print("is ldap:%s" % is_ldap_user)
-            if is_ldap_user and check_user_code == 404:
-                print("新增用户，类型为ldap")
-                cn = user.username
-                mail = user.email
-                password = password
-                status = ldap_tool.ldap_add_user(cn, mail, username, password)
-                if status:
-                    return user
         return user
 
 
 class UserProfileForm(forms.ModelForm):
+    def __init__(self, request, *args, **kwargs):
+        # 如果需要额外接收参数，要重写构造器函数
+        # 这里额外接收一个参数，用于从request.sesssion中提取之前保存的验证码
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.request = request
+
     class Meta:
         model = User
         fields = [
@@ -106,6 +200,29 @@ class UserProfileForm(forms.ModelForm):
             'name': '* required',
             'email': '* required',
         }
+
+    def save(self, commit=True):
+        user = super().save(commit=commit)
+        #LDAP用户
+        if settings.AUTH_LDAP and user.is_ldap_user:
+            ldap_tool = LDAPTool()
+            check_user_code, data = ldap_tool.check_user_status(user.username)
+            if check_user_code == 200:
+                print("更新用户，类型为ldap")
+                phone = user.phone
+                old = {'mail': data[1].get('mail', '')}
+                new = {'mail': [user.email.encode('utf-8')], }
+                if phone:
+                    old = {'mail': data[1].get('mail', ''), 'mobile': data[1].get('mobile', '')}
+                    new = {'mail': [user.email.encode('utf-8')], 'mobile': [phone.encode('utf-8')], }
+                status = ldap_tool.ldap_update_user(user.username, old, new)
+
+                if not status:
+                    msg = "ldap用户更新失败"
+                    messages.add_message(self.request, messages.ERROR, msg)
+                else:
+                    messages.add_message(self.request, messages.INFO, "ldap信息更新成功")
+        return user
 
 
 UserProfileForm.verbose_name = _("Profile")
@@ -133,7 +250,7 @@ class UserPasswordForm(forms.Form):
 
     def clean_old_password(self):
         old_password = self.cleaned_data['old_password']
-        if settings.AUTH_LDAP:
+        if settings.AUTH_LDAP and self.instance.is_ldap_user:
             # 使用LDAP验证时
             ldap_tool = LDAPTool()
             username = self.instance.username
@@ -158,13 +275,10 @@ class UserPasswordForm(forms.Form):
         self.instance.set_password(password)
         self.instance.save()
         # ldap用户
-        if settings.AUTH_LDAP:
-            check_user_code = ldap_tool.check_user_status(username)
-            if check_user_code != 404:
-                print("ldap用户:%s" % username)
-                status = ldap_tool.ldap_update_password(username, new_password=password)
-                if status:
-                    return self.instance
+        if settings.AUTH_LDAP and self.instance.is_ldap_user:
+            status = ldap_tool.ldap_update_password(username, new_password=password)
+            if status:
+                return self.instance
         return self.instance
 
 

@@ -57,18 +57,14 @@ ALLOWED_HOSTS = CONFIG.ALLOWED_HOSTS or []
 
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
-#    'assets.apps.AssetsConfig',
     'perms.apps.PermsConfig',
-#    'ops.apps.OpsConfig',
     'common.apps.CommonConfig',
-#    'terminal.apps.TerminalConfig',
     'navis.apps.NaviConfig',
     'rest_framework',
     'rest_framework_swagger',
     'django_filters',
     'bootstrap3',
     'captcha',
-#    'django_celery_beat',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -187,12 +183,6 @@ LOGGING = {
             'formatter': 'main',
             'filename': os.path.join(PROJECT_DIR, 'logs', 'diting.log')
         },
-        'ansible_logs': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'formatter': 'main',
-            'filename': os.path.join(PROJECT_DIR, 'logs', 'ansible.log')
-        },
     },
     'loggers': {
         'django': {
@@ -222,12 +212,8 @@ LOGGING = {
             'handlers': ['console', 'file'],
             'level': LOG_LEVEL,
         },
-        'ops.ansible_api': {
-            'handlers': ['console', 'ansible_logs'],
-            'level': LOG_LEVEL,
-        },
         'django_auth_ldap': {
-            'handlers': ['console', 'ansible_logs'],
+            'handlers': ['console', 'file'],
             'level': "INFO",
         }
     }

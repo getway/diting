@@ -1,7 +1,6 @@
 django==1.11
 ldap3==2.4
 django_auth_ldap
-djangorestframework
 django-rest-swagger==2.1.2
 django-filter
 django-bootstrap3==9.1.0
@@ -10,6 +9,8 @@ paramiko==2.4.0
 sshpubkeys==2.2.0
 itsdangerous==0.24
 django-formtools==2.1
+djangorestframework==3.7.3
 djangorestframework-bulk==0.2.1
 django-redis-cache==1.7.1
 passlib
+ForgeryPy==0.1

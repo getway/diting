@@ -102,11 +102,12 @@ class LDAPTool(object):
             for user in search:
                 u = user[1]['uid'][0].decode("utf-8")
                 if u == uid:
-                    result = {
-                        'uid': uid,
-                        'mail': user[1]['mail'][0].decode("utf-8"),
-                        'cn': user[1]['cn'][0].decode("utf-8"),
-                    }
+                    # result = {
+                    #     'uid': uid,
+                    #     'mail': user[1]['mail'][0].decode("utf-8"),
+                    #     'cn': user[1]['cn'][0].decode("utf-8"),
+                    # }
+                    return user
         except Exception as e:
             logger.error('获取用户%s 失败，原因为: %s' % (uid, str(e)))
         return result
@@ -179,17 +180,17 @@ class LDAPTool(object):
         try:
             obj = self.ldapconn
             obj.protocal_version = ldap.VERSION3
-
+            password_encrypt = pass_encrypt(password)
             addDN = "uid=%s,%s" % (username, BASE_DN)
             attrs = {}
-            attrs['objectclass'] = ['inetOrgPerson']
+            attrs['objectclass'] = ['inetOrgPerson'.encode('utf-8')]
             attrs['cn'] = [str(cn).encode('utf-8')]
             # attrs['homeDirectory'] = str('/home/%s' % username)
             # attrs['loginShell'] = '/bin/bash'
             attrs['mail'] = [str(mail).encode('utf-8')]
             attrs['sn'] = [str(username).encode('utf-8')]
             attrs['uid'] = [str(username).encode('utf-8')]
-            attrs['userPassword'] = [str(password).encode('utf-8')]
+            attrs['userPassword'] = [str(password_encrypt).encode('utf-8')]
             # attrs['uidNumber'] = str(self.__get_max_uidNumber())
             # attrs['gidNumber'] = self.__ldap_getgid(cn='员工')
             ldif = ldap.modlist.addModlist(attrs)
@@ -229,6 +230,7 @@ class LDAPTool(object):
                  403: 用户被禁用
         """
         result = 404
+        data = None
         try:
             target_cn = self.ldap_get_user(uid=uid)
             if target_cn is None:  # 如未查到用户，记录日志，但不算错误，后边有很多地方会验证用户是否存在
@@ -238,11 +240,11 @@ class LDAPTool(object):
                 if self.check_user_belong_to_group(uid=uid, group_cn='黑名单'):
                     result = 403
                 else:
-                    result = 200
+                    result, data = 200, target_cn
         except ldap.LDAPError as e:
             logger.error("%s 检查用户状态失败，原因为: %s" % (uid, str(e)))
             return 500
-        return result
+        return result, data
 
     def ldap_get_vaild(self, uid=None, passwd=None):
         obj = self.ldapconn

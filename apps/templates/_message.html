@@ -1,13 +1,13 @@
 {% load i18n %}
 {% block first_login_message %}
-    {% if request.user.is_authenticated and request.user.is_first_login %}
-    <div class="alert alert-danger help-message alert-dismissable">
-        {% url 'users:user-first-login' as first_login_url %}
-        {% blocktrans %}
-        Your information was incomplete. Please click <a href="{{ first_login_url }}"> this link </a>to complete your information.
-        {% endblocktrans %}
-    </div>
-    {% endif %}
+    {#{% if request.user.is_authenticated and request.user.is_first_login %} #}
+    {#<div class="alert alert-danger help-message alert-dismissable"> #}
+    {#    {% url 'users:user-first-login' as first_login_url %} #}
+    {#    {% blocktrans %} #}
+    {#    Your information was incomplete. Please click <a href="{{ first_login_url }}"> this link </a>to complete your information. #}
+    {#    {% endblocktrans %} #}
+    {#</div> #}
+    {#{% endif %}#}
 {% endblock %}
 {% block update_public_key_message %}
     {% if request.user.is_authenticated and not request.user.is_public_key_valid and not request.COOKIE.close_public_key_msg != '1' %}
@@ -21,13 +21,13 @@
     {% endif %}
 {% endblock %}
 
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} help-message" >
-            {{ message|safe }}
-        </div>
-    {% endfor %}
-{% endif %}
+{# {% if messages %}  #}
+{#    {% for message in messages %} #}
+{#        <div class="alert alert-{{ message.tags }} help-message" > #}
+{#            {{ message|safe }} #}
+{#        </div> #}
+{#    {% endfor %} #}
+{# {% endif %} #}
 
 <script>
     function closePublicKeyMsg() {
