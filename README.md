@@ -71,7 +71,7 @@ $ source /opt/venv3/bin/active
 $ (venv3) [root@xxx xxx]#
 ```
 
-### 3.3 安装谛听(diting) 
+### 3.3 安装谛听(diting)
 
 ```shell
 #进入到安装目录/opt
