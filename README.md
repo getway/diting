@@ -16,15 +16,14 @@
 
 
 
-[![运维导航](docs/_static/img/dt-navis.png)](https://www.python.org/)
+[![运维导航](docs/_static/img/dt-navis.png)](#)
 
-[![导航列表](docs/_static/img/dt-navi-list.png)](https://www.python.org/)
+[![导航列表](docs/_static/img/dt-navi-list.png)](#)
 
-[![导航详情](docs/_static/img/dt-navi-detail.png)](https://www.python.org/)
+[![导航详情](docs/_static/img/dt-navi-detail.png)](#)
 
-[![用户管理](docs/_static/img/dt-users-manager.png)](https://www.python.org/)
+[![用户管理](docs/_static/img/dt-users-manager.png)](#)
 
-[![用户管理](docs/_static/img/dt-ldap-manage.png)](https://www.python.org/)
 
 ## 3 安装说明
 需要基本环境Python3.6
@@ -94,8 +93,10 @@ $ python manage.py loaddata fixtures/init.json
 
 ```shell
 $ cd /opt/diting
-#后台启动
-$ ./dt start -d  或 python run_server.py
+直接启动：
+$ ./dt start
+#或后台启动
+$ ./dt start -d
 
 # 访问
 http://127.0.0.1:8080
@@ -104,5 +105,43 @@ http://127.0.0.1:8080
 
 ```
 
+### 3.5 nginx配置
+生产环境，请把配置中DEBUG改为False
+```
+#nginx配置文件
+server {
+	listen 80;
+	listen 443 ssl http2;
+	server_name 域名; #配置自己的域名
+
+	#https配置，没有的可以忽略
+	#ssl on;
+	#ssl_certificate ***.cer;  #替换为自己的路径
+	#ssl_certificate_key ***.key; #替换为自己的路径
+	#ssl_session_timeout 5m;
+	#ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+	#ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+	#ssl_prefer_server_ciphers on;
+
+	index index.html index.htm index.php;
+
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header Host $host;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+	location /media/ {
+		root /opt/diting/data/;
+	}
+
+	location /static/ {
+		root /opt/diting/data/;
+	}
+
+	location / {
+		proxy_pass http://localhost:8080;
+	}
+
+}
+```
 
 
