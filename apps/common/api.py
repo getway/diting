@@ -10,6 +10,7 @@ from django.conf import settings
 
 from .permissions import IsSuperUser
 from .serializers import MailTestSerializer, LDAPTestSerializer
+# from users.models import User
 
 
 class MailTestingAPI(APIView):
@@ -46,41 +47,47 @@ class MailTestingAPI(APIView):
             return Response({"error": str(serializer.errors)}, status=401)
 
 
-class LDAPUserListAPI(APIView):
-    permission_classes = (IsSuperUser,)
-    success_message = _("ldap user search success")
-
-    def get(self, request):
-        host = settings.AUTH_LDAP_SERVER_URI
-        bind_dn = settings.AUTH_LDAP_BIND_DN
-        password = settings.AUTH_LDAP_BIND_PASSWORD
-        use_ssl = settings.AUTH_LDAP_START_TLS
-        search_ou = settings.AUTH_LDAP_SEARCH_OU
-        search_filter = settings.AUTH_LDAP_SEARCH_FILTER
-        attr_map = settings.AUTH_LDAP_USER_ATTR_MAP
-
-        server = Server(host, use_ssl=use_ssl)
-        conn = Connection(server, bind_dn, password)
-        try:
-            conn.bind()
-        except Exception as e:
-            return Response({"error": str(e)}, status=401)
-
-        ok = conn.search(search_ou, search_filter % ({"user": "*"}),
-                         attributes=list(attr_map.values()))
-        if not ok:
-            return Response({"error": "Search no entry matched"}, status=401)
-
-        users = []
-        for entry in conn.entries:
-            user = {}
-            for attr, mapping in attr_map.items():
-                if hasattr(entry, mapping):
-                    user[attr] = getattr(entry, mapping)
-            users.append(user)
-
-        print(users)
-        return Response({'data': ""}, status=200)
+# class LDAPUserListAPI(APIView):
+#     """
+#     列出所有LDAP用户
+#     """
+#     permission_classes = (IsSuperUser,)
+#     success_message = _("ldap user search success")
+#
+#     def get(self, request):
+#         host = settings.AUTH_LDAP_SERVER_URI
+#         bind_dn = settings.AUTH_LDAP_BIND_DN
+#         password = settings.AUTH_LDAP_BIND_PASSWORD
+#         use_ssl = settings.AUTH_LDAP_START_TLS
+#         search_ou = settings.AUTH_LDAP_SEARCH_OU
+#         search_filter = settings.AUTH_LDAP_SEARCH_FILTER
+#         attr_map = settings.AUTH_LDAP_USER_ATTR_MAP
+#
+#         server = Server(host, use_ssl=use_ssl)
+#         conn = Connection(server, bind_dn, password)
+#         try:
+#             conn.bind()
+#         except Exception as e:
+#             return Response({"error": str(e)}, status=401)
+#
+#         ok = conn.search(search_ou, search_filter % ({"user": "*"}),
+#                          attributes=list(attr_map.values()))
+#         if not ok:
+#             return Response({"error": "Search no entry matched"}, status=401)
+#
+#         users = []
+#         for entry in conn.entries:
+#             # user = entry.entry_to_json(include_empty=True)
+#             # user_dict = json.loads(user)
+#             user = {}
+#             for attr, mapping in attr_map.items():
+#                 if hasattr(entry, mapping):
+#                     user[attr] = getattr(entry, mapping).value
+#
+#             #判断当前是否导入
+#             User.objects.all().values('username')
+#             users.append(user)
+#         return Response(data=users, status=200)
 
 
 class LDAPTestingAPI(APIView):

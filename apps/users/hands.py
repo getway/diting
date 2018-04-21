@@ -1,5 +1,5 @@
 """
-    jumpserver.__app__.hands.py
+    diting.__app__.hands.py
     ~~~~~~~~~~~~~~~~~
 
     This app depends other apps api, function .. should be import or write mack here.

@@ -2,7 +2,7 @@
 #
 
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 
 from common.utils import get_logger
 from .models import User
@@ -24,6 +24,27 @@ def on_ldap_user_created(sender, **kwargs):
     # user.is_active = 0
 
 
+@receiver(post_delete, sender=User)
+def on_user_delete(sender, **kwargs):
+    username = kwargs['instance'].username
+    if settings.AUTH_LDAP:
+        try:
+            from common.ldapadmin import LDAPTool
+            ldap_tool = LDAPTool()
+            check_user_code, data = ldap_tool.check_user_status(username)
+            if check_user_code != 404:
+                status = ldap_tool.ldap_delete(username)
+                if status:
+                    msg = "用户:%s 删除成功" % username
+                    logger.info(msg)
+                else:
+                    msg = "用户%s 删除失败" % username
+                    logger.warning(msg)
+        except Exception as e:
+            msg = str(e)
+            logger.error(msg)
+
+
 @receiver(post_save, sender=User)
 def on_user_created(sender, instance=None, created=False, **kwargs):
     if created:
@@ -34,13 +55,3 @@ def on_user_created(sender, instance=None, created=False, **kwargs):
             send_user_created_mail(instance)
 
 
-# def create_ldap_user(sender, instance, created, **kwargs):
-#  if created:
-#   new_profile = StudentProfile.objects.create(user=instance)
-#   user = LDAPBackend().populate_user(instance.username)
-#   if user:
-#    desc = user.ldap_user.attrs.get("description", [])[0]
-#    office = user.ldap_user.attrs.get("physicalDeliveryOfficeName", [])[0]
-#    new_profile.student_number = office
-#    new_profile.class_of = desc
-#    new_profile.save()

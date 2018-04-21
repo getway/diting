@@ -5,43 +5,42 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from common.utils import get_object_or_none
 from common.fields import StringIDField
-from .models import AssetPermission, NodePermission
+from .models import NaviPermission
 
 
-class AssetPermissionCreateUpdateSerializer(serializers.ModelSerializer):
+class NaviPermissionCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = NodePermission
+        model = NaviPermission
         fields = [
-            'id', 'node', 'user_group', 'system_user',
-            'is_active', 'date_expired'
+            'id', 'navi', 'user_group', 'user', 'date_expired'
         ]
 
 
-class AssetPermissionListSerializer(serializers.ModelSerializer):
-    node = StringIDField(read_only=True)
+class NaviPermissionListSerializer(serializers.ModelSerializer):
+    navi = StringIDField(read_only=True)
     user_group = StringIDField(read_only=True)
-    system_user = StringIDField(read_only=True)
+    user = StringIDField(read_only=True)
 
     class Meta:
-        model = NodePermission
+        model = NaviPermission
         fields = '__all__'
 
 
-class AssetPermissionUpdateUserSerializer(serializers.ModelSerializer):
+class NaviPermissionUpdateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = AssetPermission
+        model = NaviPermission
         fields = ['id', 'users']
 
 
-class AssetPermissionUpdateAssetSerializer(serializers.ModelSerializer):
+class NaviPermissionUpdateGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = AssetPermission
-        fields = ['id', 'assets']
+        model = NaviPermission
+        fields = ['id', 'user-groups']
 
 
-class UserAssetPermissionCreateUpdateSerializer(AssetPermissionCreateUpdateSerializer):
+class UserNaviPermissionCreateUpdateSerializer(NaviPermissionCreateUpdateSerializer):
     is_inherited = serializers.SerializerMethodField()
 
     @staticmethod

@@ -88,7 +88,7 @@ class LDAPTool(object):
         except ldap.LDAPError as e:
             logger.error('ldap search %s 失败，原因为: %s' % (value, str(e)))
 
-    def ldap_get_user(self, uid=None):
+    def ldap_get_user(self, uid=None, isdict=False):
         """
         通过查询用户uid，从ldap_search_dn进一步提取所需数据，search到的是全部信息
         :param uid:
@@ -102,11 +102,14 @@ class LDAPTool(object):
             for user in search:
                 u = user[1]['uid'][0].decode("utf-8")
                 if u == uid:
-                    # result = {
-                    #     'uid': uid,
-                    #     'mail': user[1]['mail'][0].decode("utf-8"),
-                    #     'cn': user[1]['cn'][0].decode("utf-8"),
-                    # }
+                    if isdict:
+                        uu = {}
+                        for key, valueB in user[1].items():
+                            #不获取password字段
+                            if key not in ('userPassword',):
+                                value = valueB[0].decode('utf-8')
+                                uu[key] = value
+                        return uu
                     return user
         except Exception as e:
             logger.error('获取用户%s 失败，原因为: %s' % (uid, str(e)))
@@ -305,6 +308,16 @@ class LDAPTool(object):
             logger.error("修改用户%s 失败，原因为: %s" % (uid, str(e)))
         return result
 
+    def ldap_delete(self, uid):
+        try:
+            obj = self.ldapconn
+            obj.protocol_version = ldap.VERSION3
+            dn = "uid=%s,%s" % (uid, BASE_DN)
+            obj.delete_s(dn)
+            return True
+        except ldap.LDAPError as e:
+            logger.error("删除用户%s 失败，原因为: %s" % (uid, str(e)))
+            return False
 
 def main():
     # ldap = LDAPTool()

@@ -36,6 +36,10 @@ from .. import forms
 from ..models import User, UserGroup
 from ..utils import AdminUserRequiredMixin
 from ..signals import post_user_create
+from django.conf import settings
+from common.ldapadmin import LDAPTool
+from django.contrib import messages
+from django.shortcuts import render, HttpResponse
 
 
 __all__ = [
@@ -46,17 +50,64 @@ __all__ = [
     'UserProfileUpdateView', 'UserPasswordUpdateView',
     'UserPublicKeyUpdateView', 'UserBulkUpdateView',
     'UserPublicKeyGenerateView', 'LDAPUserListView',
+    'LdapUserDetailView', 'LdapUserUpdateView',
 ]
 
 logger = get_logger(__name__)
+
+
+class LdapUserUpdateView(AdminUserRequiredMixin, SuccessMessageMixin, FormView):
+    form_class = forms.LDAPUserUpdateForm
+    template_name = 'users/ldap_user_update.html'
+    success_url = reverse_lazy('users:ldap-user-list')
+    success_message = update_success_msg
+
+    def get(self, request, *args, **kwargs):
+        #获取客户端传来的参数PK
+        pk = kwargs.get('pk')
+        if settings.AUTH_LDAP:
+            try:
+                ldap_tool = LDAPTool()
+                status = ldap_tool.ldap_get_user(pk, isdict=True)
+                if status:
+                    msg = "用户:%s 获取成功" % pk
+                    data = status
+                    form = self.form_class(initial=data)
+                    context = {'form': form, 'app': _('Users'), 'action': _('LDAP Update user')}
+                    return render(request, self.template_name, context)
+                else:
+                    msg = "未获取用户:%s" % pk
+                    messages.add_message(self.request, messages.WARNING, msg)
+                    return redirect(reverse('users:ldap-user-list'))
+            except Exception as e:
+                msg = "用户:%s 获取失败，原因:%s" % (pk, str(e))
+                messages.add_message(self.request, messages.ERROR, msg)
+                return redirect(reverse('users:ldap-user-list'))
+        else:
+            msg = '请系统先支持ldap'
+            messages.add_message(self.request, messages.WARNING, msg)
+            return redirect(reverse('users:ldap-user-list'))
+
+    def post(self, request, *args, **kwargs):
+        # print(request.POST)
+        form = forms.LDAPUserUpdateForm(request.POST)
+        if form.is_valid():
+            objectClass = form.cleaned_data['objectClass']
+            uid = form.cleaned_data['uid']
+            cn = form.cleaned_data['cn']
+            mail = form.cleaned_data['mail']
+            givenName = form.cleaned_data['givenName']
+            displayName = form.cleaned_data['displayName']
+            employeeNumber = form.cleaned_data['employeeNumber']
+            mobile = form.cleaned_data['mobile']
+            postalAddress = form.cleaned_data['postalAddress']
+        return HttpResponse(json.dumps(objectClass))
 
 
 class LDAPUserListView(AdminUserRequiredMixin, TemplateView):
     template_name = 'users/ldap_user_list.html'
 
     def get_context_data(self, **kwargs):
-        from common.ldapadmin import LDAPTool
-        LDAPTool
         context = super().get_context_data(**kwargs)
         context.update({
             'app': _('Users'),
@@ -156,6 +207,41 @@ class UserBulkUpdateView(AdminUserRequiredMixin, TemplateView):
         }
         kwargs.update(context)
         return super().get_context_data(**kwargs)
+
+
+class LdapUserDetailView(AdminUserRequiredMixin, TemplateView):
+    template_name = 'users/ldap_user_detail.html'
+
+    def get_context_data(self, **kwargs):
+        data = ''
+        pk = kwargs.get('pk')
+        if settings.AUTH_LDAP:
+            try:
+                ldap_tool = LDAPTool()
+                status = ldap_tool.ldap_get_user(pk, isdict=True)
+                if status:
+                    msg = "用户:%s 获取成功" % pk
+                    data = status
+                    # messages.add_message(self.request, messages.SUCCESS, msg)
+                else:
+                    msg = "未获取用户:%s" % pk
+                    messages.add_message(self.request, messages.WARNING, msg)
+                    return redirect(reverse('users:ldap-user-list'))
+            except Exception as e:
+                msg = "用户:%s 获取失败，原因:%s" % (pk, str(e))
+                messages.add_message(self.request, messages.ERROR, msg)
+                return redirect(reverse('users:ldap-user-list'))
+        else:
+            msg = '请系统先支持ldap'
+            messages.add_message(self.request, messages.WARNING, msg)
+            return redirect(reverse('users:ldap-user-list'))
+        context = super().get_context_data(**kwargs)
+        context['user'] = data
+        context.update({
+            'app': _('Users'),
+            'action': _('LDAP User Detail'),
+        })
+        return context
 
 
 class UserDetailView(AdminUserRequiredMixin, DetailView):

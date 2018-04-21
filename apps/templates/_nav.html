@@ -11,6 +11,9 @@
     </a>
     <ul class="nav nav-second-level active">
         <li id="user"><a href="{% url 'users:user-list' %}">{% trans 'User list' %}</a></li>
+        {% if dt_settings.AUTH_LDAP %}
+        <li id="ldap-user"><a href="{% url 'users:ldap-user-list' %}">{% trans 'Ldap User list' %}</a></li>
+        {% endif %}
         <li id="user-group"><a href="{% url 'users:user-group-list' %}">{% trans 'User group' %}</a></li>
         <li id="login-log"><a href="{% url 'users:login-log-list' %}">{% trans 'Login logs' %}</a></li>
     </ul>
@@ -25,7 +28,6 @@
 </li>
 <li id="perms">
     <a href="#"><i class="fa fa-edit" style="width: 14px"></i> <span class="nav-label">{% trans 'Perms' %}</span><span class="fa arrow"></span></a>
-
 </li>
 
 <li id="settings">

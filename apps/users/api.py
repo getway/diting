@@ -1,8 +1,6 @@
 # ~*~ coding: utf-8 ~*~
 import uuid
-
 from django.core.cache import cache
-
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -19,9 +17,127 @@ from .permissions import IsSuperUser, IsValidUser, IsCurrentUserOrReadOnly, \
 from .utils import check_user_valid, generate_token
 from common.mixins import IDInFilterMixin
 from common.utils import get_logger
+from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
+from ldap3 import Server, Connection
+from django.conf import settings
+from common.ldapadmin import LDAPTool
 
 
 logger = get_logger(__name__)
+
+
+class LDAPUserDetailAPI(APIView):
+    """
+    LDAP用户属性
+    """
+    permission_classes = (IsSuperUser,)
+    success_message = _("ldap user search success")
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        data = {'status': '', 'msg': '', 'data': ''}
+        if settings.AUTH_LDAP:
+            try:
+                ldap_tool = LDAPTool()
+                status = ldap_tool.ldap_get_user(pk, isdict=True)
+                if status:
+                    data['msg'] = "用户:%s 获取成功" % pk
+                    data['data'] = status
+                    data['status'] = 200
+                else:
+                    data['msg'] = "未获取用户:%s" % pk
+                    data['status'] = 404
+                return Response(data=data, status=200)
+            except Exception as e:
+                data['msg'] = "用户:%s 获取失败，原因:%s" % (pk, str(e))
+                data['status'] = 500
+                return Response(data=data, status=200)
+        else:
+            data['msg'] = '请系统先支持ldap'
+            data['status'] = 501
+            return Response(data=data, status=200)
+
+    def delete(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        data = {'status': '', 'msg': ''}
+        if settings.AUTH_LDAP:
+            try:
+                ldap_tool = LDAPTool()
+                status = ldap_tool.ldap_delete(pk)
+                user = User.objects.filter(username=pk)
+                if user:
+                    #如果该用户是系统用户，删除ldap时候，顺便把系统中用户也删除了
+                    user.delete()
+                if status:
+                    msg = "用户:%s 删除成功" % pk
+                    rt = 200
+                else:
+                    msg = "用户%s 删除失败" % pk
+                    rt = 511
+                data['msg'] = msg
+                data['status'] = rt
+            except Exception as e:
+                msg = str(e)
+                rt = 500
+                data['msg'] = msg
+                data['status'] = rt
+                return Response(data=data, status=data['status'])
+            return Response(data=data, status=data['status'])
+        else:
+            data['msg'] = '请系统先支持ldap'
+            data['status'] = 512
+            return Response(data=data, status=data['status'])
+
+
+class LDAPUserListAPI(APIView):
+    """
+    列出所有LDAP用户
+    """
+    permission_classes = (IsSuperUser,)
+    success_message = _("ldap user search success")
+
+    def get(self, request):
+        host = settings.AUTH_LDAP_SERVER_URI
+        bind_dn = settings.AUTH_LDAP_BIND_DN
+        password = settings.AUTH_LDAP_BIND_PASSWORD
+        use_ssl = settings.AUTH_LDAP_START_TLS
+        search_ou = settings.AUTH_LDAP_SEARCH_OU
+        search_filter = settings.AUTH_LDAP_SEARCH_FILTER
+        attr_map = settings.AUTH_LDAP_USER_ATTR_MAP
+
+        server = Server(host, use_ssl=use_ssl)
+        conn = Connection(server, bind_dn, password)
+        try:
+            conn.bind()
+        except Exception as e:
+            return Response({"error": str(e)}, status=401)
+
+        ok = conn.search(search_ou, search_filter % ({"user": "*"}),
+                         attributes=list(attr_map.values()))
+        if not ok:
+            return Response({"error": "Search no entry matched"}, status=401)
+
+        users = []
+        for entry in conn.entries:
+            # user = entry.entry_to_json(include_empty=True)
+            # user_dict = json.loads(user)
+            user = {}
+            for attr, mapping in attr_map.items():
+                if hasattr(entry, mapping):
+                    user[attr] = getattr(entry, mapping).value
+
+            #判断当前是否导入
+            local_user = User.objects.filter(username=user['username'])
+            user['id'] = user['username']
+            if local_user:
+                user['isImported'] = True
+                # print("该用户已导入:%s" % local_user[0].username)
+            else:
+                user['isImported'] = False
+                # print("没有导入ldap_local:%s"%local_user)
+            users.append(user)
+        return Response(data=users, status=200)
 
 
 class UserViewSet(IDInFilterMixin, BulkModelViewSet):

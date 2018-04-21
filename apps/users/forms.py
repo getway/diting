@@ -12,6 +12,26 @@ from common.ldapadmin import LDAPTool
 from django.contrib import messages
 
 
+class LDAPUserUpdateForm(forms.Form):
+    objectClass = forms.CharField(label=_('objectClass'), max_length=32)
+    uid = forms.CharField(label=_('uid'), max_length=32, required=True)
+    cn = forms.CharField(label=_('cn'), max_length=32, required=True)
+    mail = forms.EmailField(label=_('mail'), required=True)
+    givenName = forms.CharField(label=_('givenName'), max_length=32)
+    displayName = forms.CharField(label=_('displayName'), max_length=32)
+    employeeNumber = forms.CharField(label=_('employeeNumber'), max_length=32)
+    mobile = forms.CharField(label=_('mobile'), max_length=32)
+    postalAddress = forms.CharField(label=_('postalAddress'), max_length=32)
+    # password = forms.CharField(
+    #     label=_('Password'), widget=forms.PasswordInput,
+    #     max_length=128, strip=False
+    # )
+
+    # def __init__(self, *args, **kwargs):
+    #     super(LDAPUserUpdateForm, self).__init__(*args, **kwargs)
+    #     self.fields['objectClass'].value = "test"
+
+
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(label=_('Username'), max_length=100)
     password = forms.CharField(
@@ -112,7 +132,7 @@ class UserCreateUpdateForm(forms.ModelForm):
         widget=forms.Textarea(attrs={'placeholder': _('ssh-rsa AAAA...')}),
         help_text=_('Paste user id_rsa.pub here.')
     )
-    is_ldap_user = forms.BooleanField(required=False, label="is ldap")
+    is_ldap_user = forms.BooleanField(required=False, label=_("is ldap"))
 
     class Meta:
         model = User

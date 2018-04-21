@@ -1,5 +1,5 @@
 """
-WSGI config for jumpserver project.
+WSGI config for diting project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

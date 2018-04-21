@@ -279,6 +279,7 @@ jumpserver.initDataTable = function (options) {
         order: options.order || [],
         // select: options.select || 'multi',
         buttons: [],
+        processing: true,
         columnDefs: columnDefs,
         ajax: {
             url: options.ajax_url ,
@@ -290,6 +291,7 @@ jumpserver.initDataTable = function (options) {
             search: "搜索",
             lengthMenu: "每页  _MENU_",
             info: "显示第 _START_ 至 _END_ 项结果; 总共 _TOTAL_ 项",
+            processing: "正在加载数据...",
             infoFiltered:   "",
             infoEmpty:      "",
             zeroRecords:    "没有匹配项",
@@ -431,6 +433,7 @@ jumpserver.initServerSideDataTable = function (options) {
             info: "显示第 _START_ 至 _END_ 项结果; 总共 _TOTAL_ 项",
             infoFiltered:   "",
             infoEmpty:      "",
+            processing: "正在加载数据...",
             zeroRecords:    "没有匹配项",
             emptyTable:     "没有记录",
             paginate: {

@@ -80,3 +80,11 @@ class Setting(models.Model):
     class Meta:
         db_table = "settings"
 
+
+# class OperationLogs(models.Model):
+#     """操作日志"""
+#     type = models.CharField(default="", max_length=64, verbose_name="类型")  # 可根据model名称等...根据各自的需求做此字段的取舍
+#     content = models.TextField(verbose_name="修改详情", null=True)
+#     oper = models.CharField(default="", max_length=64, verbose_name="操作者")
+
+

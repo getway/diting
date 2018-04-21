@@ -14,7 +14,7 @@ from django.utils.translation import ugettext as _
 from django.core.cache import cache
 
 
-logger = logging.getLogger('jumpserver')
+logger = logging.getLogger('diting')
 
 
 class AdminUserRequiredMixin(UserPassesTestMixin):

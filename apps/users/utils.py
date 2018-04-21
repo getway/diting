@@ -18,7 +18,7 @@ from common.utils import reverse, get_object_or_none
 from .models import User, LoginLog
 
 
-logger = logging.getLogger('jumpserver')
+logger = logging.getLogger('diting')
 
 
 class AdminUserRequiredMixin(UserPassesTestMixin):

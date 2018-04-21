@@ -12,7 +12,9 @@
         {% csrf_token %}
         <h3>{% trans 'Account' %}</h3>
         {% bootstrap_field form.name layout="horizontal" %}
+        {% if dt_settings.AUTH_LDAP %}
         {% bootstrap_field form.is_ldap_user layout="horizontal" %}
+        {% endif %}
         {% bootstrap_field form.username layout="horizontal" %}
         {% bootstrap_field form.email layout="horizontal" %}
         {% bootstrap_field form.groups layout="horizontal" %}

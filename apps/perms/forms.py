@@ -4,14 +4,13 @@ from __future__ import absolute_import, unicode_literals
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from .models import NodePermission
+from .models import NaviPermission
 
-
-class AssetPermissionForm(forms.ModelForm):
+class NaviPermissionForm(forms.ModelForm):
     class Meta:
-        model = NodePermission
+        model = NaviPermission
         fields = [
-            'node', 'user_group', 'system_user', 'is_active',
+            'navi', 'users', 'user_groups',
             'date_expired', 'comment',
         ]
         widgets = {

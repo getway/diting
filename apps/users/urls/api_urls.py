@@ -20,6 +20,8 @@ urlpatterns = [
     url(r'^v1/connection-token/$', api.UserConnectionTokenApi.as_view(), name='connection-token'),
     url(r'^v1/profile/$', api.UserProfile.as_view(), name='user-profile'),
     url(r'^v1/auth/$', api.UserAuthApi.as_view(), name='user-auth'),
+    url(r'^v1/users/ldap/$', api.LDAPUserListAPI.as_view(), name='ldap-users'),
+    url(r'^v1/users/ldap/(?P<pk>[0-9a-zA-Z\-]{1,36})/$', api.LDAPUserDetailAPI.as_view(), name='ldap-user-detail'),
     url(r'^v1/users/(?P<pk>[0-9a-zA-Z\-]{36})/password/$',
         api.ChangeUserPasswordApi.as_view(), name='change-user-password'),
     url(r'^v1/users/(?P<pk>[0-9a-zA-Z\-]{36})/password/reset/$',
