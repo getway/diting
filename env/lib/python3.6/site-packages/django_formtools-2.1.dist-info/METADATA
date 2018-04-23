@@ -1,0 +1,62 @@
+Metadata-Version: 2.0
+Name: django-formtools
+Version: 2.1
+Summary: A set of high-level abstractions for Django forms
+Home-page: https://django-formtools.readthedocs.io/en/latest/
+Author: Django Software Foundation
+Author-email: foundation@djangoproject.com
+License: BSD
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 1.8
+Classifier: Framework :: Django :: 1.9
+Classifier: Framework :: Django :: 1.10
+Classifier: Framework :: Django :: 1.11
+Classifier: Framework :: Django :: 2.0
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Internet :: WWW/HTTP
+Requires-Dist: Django (>=1.8)
+
+================
+django-formtools
+================
+
+.. image:: https://secure.travis-ci.org/django/django-formtools.svg
+    :target: http://travis-ci.org/django/django-formtools
+
+.. image:: https://coveralls.io/repos/django/django-formtools/badge.svg?branch=master
+   :target: https://coveralls.io/r/django/django-formtools
+
+Django's "formtools" is a set of high-level abstractions for Django forms.
+Currently for form previews and multi-step forms.
+
+This code used to live in Django proper -- in ``django.contrib.formtools``
+-- but was separated into a standalone package in Django 1.8 to keep the
+framework's core clean.
+
+For a full list of available formtools, see
+https://django-formtools.readthedocs.io/
+
+django-formtools can also be found on and installed from the Python
+Package Index: https://pypi.python.org/pypi/django-formtools
+
+To get more help:
+
+* Join the #django channel on irc.freenode.net. Lots of helpful people hang out
+  there. Read the archives at http://django-irc-logs.com/.
+
+* Join the django-users mailing list, or read the archives, at
+  https://groups.google.com/group/django-users.
+
+

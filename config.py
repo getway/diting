@@ -31,16 +31,16 @@ class Config:
     # See https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
     # SQLite setting:
-    DB_ENGINE = 'sqlite3'
-    DB_NAME = os.path.join(BASE_DIR, 'data', 'db.sqlite3')
+    # DB_ENGINE = 'sqlite3'
+    # DB_NAME = os.path.join(BASE_DIR, 'data', 'db.sqlite3')
 
     # MySQL or postgres setting like:
-    # DB_ENGINE = 'mysql'
-    # DB_HOST = '127.0.0.1'
-    # DB_PORT = 3306
-    # DB_USER = 'root'
-    # DB_PASSWORD = ''
-    # DB_NAME = 'jumpserver'
+    DB_ENGINE = 'mysql'
+    DB_HOST = '127.0.0.1'
+    DB_PORT = 3306
+    DB_USER = 'root'
+    DB_PASSWORD = '123456'
+    DB_NAME = 'jumpserver'
 
     # When Django start it will bind this host and port
     # ./manage.py runserver 127.0.0.1:8080
