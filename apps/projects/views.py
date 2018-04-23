@@ -6,12 +6,12 @@
 # @File    : views.py
 # @Software: PyCharm
 
-from apps.users.models import User, UserGroup
-from .models import Navi
+from users.models import User, UserGroup
+from .models import Projects
 from django.shortcuts import render
-from .forms import NaviCreateUpdateForm
+from .forms import ProjectsCreateUpdateForm
 from django.contrib.auth.decorators import login_required
-from apps.common.utils import get_logger, get_object_or_none, is_uuid, ssh_key_gen
+from common.utils import get_logger, get_object_or_none, is_uuid, ssh_key_gen
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -33,7 +33,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import logout as auth_logout
 from .utils import AdminUserRequiredMixin
 from . import forms
-from apps.common.const import create_success_msg, update_success_msg
+from common.const import create_success_msg, update_success_msg
 
 logger = get_logger(__name__)
 
@@ -51,8 +51,8 @@ class ProjectsListView(AdminUserRequiredMixin, TemplateView):
 
 
 class ProjectsCreateView(AdminUserRequiredMixin, SuccessMessageMixin, CreateView):
-    model = Navi
-    form_class = forms.NaviCreateUpdateForm
+    model = Projects
+    form_class = forms.ProjectsCreateUpdateForm
     template_name = 'projects/projects_create_update.html'
     success_url = reverse_lazy('projects:projects-list')
     success_message = create_success_msg
@@ -63,15 +63,15 @@ class ProjectsCreateView(AdminUserRequiredMixin, SuccessMessageMixin, CreateView
         return context
 
     def form_valid(self, form):
-        navi = form.save(commit=False)
-        navi.created_by = self.request.user.username or 'System'
-        navi.save()
+        projects = form.save(commit=False)
+        projects.created_by = self.request.user.username or 'System'
+        projects.save()
         return super().form_valid(form)
 
 
 class ProjectsUpdateView(AdminUserRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = Navi
-    form_class = forms.NaviUpdateForm
+    model = Projects
+    form_class = forms.ProjectsUpdateForm
     template_name = 'projects/Projects_create_update.html'
     context_object_name = 'projects_object'
     success_url = reverse_lazy('projects:projects-list')
@@ -84,7 +84,7 @@ class ProjectsUpdateView(AdminUserRequiredMixin, SuccessMessageMixin, UpdateView
 
 
 class ProjectsDetailView(AdminUserRequiredMixin, DetailView):
-    model = Navi
+    model = Projects
     template_name = 'projects/projects_detail.html'
     context_object_name = "projects_object"
 

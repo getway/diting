@@ -6,10 +6,10 @@ from rest_framework.routers import DefaultRouter
 from .. import api
 
 
-app_name = "projects"
+app_name = "api-projects"
 
 router = DefaultRouter()
-router.register(r'v1/projects', api.NaviViewSet, 'projects')
+router.register(r'v1/projects', api.ProjectsViewSet, 'projects')
 
 urlpatterns = [
         url(r'^v1/projects/(?P<pk>[0-9a-zA-Z\-]{36})/groups/$',

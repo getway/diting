@@ -4,10 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework_bulk import BulkListSerializer
-from apps.common.mixins import BulkSerializerMixin
+from common.mixins import BulkSerializerMixin
 from .models import Projects
 from rest_framework import generics
-from apps.users.models import User, UserGroup
+from users.models import User, UserGroup
 
 
 class ProjectsSerializer(BulkSerializerMixin, serializers.ModelSerializer):

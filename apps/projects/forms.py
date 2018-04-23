@@ -8,27 +8,27 @@
 
 
 from django import forms
-from .models import Navi
+from .models import Projects
 
 
-class NaviCreateUpdateForm(forms.ModelForm):
+class ProjectsCreateUpdateForm(forms.ModelForm):
 
     def clean(self):
-        cleaned_data = super(NaviCreateUpdateForm, self).clean()
+        cleaned_data = super(ProjectsCreateUpdateForm, self).clean()
         value = cleaned_data.get('name')
         try:
-            Navi.objects.get(name=value)
+            Projects.objects.get(name=value)
             self._errors['name']=self.error_class(["%s的信息已经存在" % value])
-        except Navi.DoesNotExist:
+        except Projects.DoesNotExist:
             pass
         return cleaned_data
 
     class Meta:
-        model = Navi
+        model = Projects
         exclude = ("id",)
 
 
-class NaviUpdateForm(forms.ModelForm):
+class ProjectsUpdateForm(forms.ModelForm):
     class Meta:
-        model = Navi
+        model = Projects
         exclude = ("id",)

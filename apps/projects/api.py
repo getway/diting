@@ -6,7 +6,7 @@
 # @File    : api.py
 # @Software: PyCharm
 
-from .models import Navi
+from .models import Projects
 from . import serializers
 from common.utils import get_logger
 from .hands import IsSuperUser, IsSuperUserOrAppUser
@@ -14,20 +14,20 @@ from rest_framework_bulk import BulkModelViewSet
 from rest_framework import generics
 
 
-class NaviViewSet(BulkModelViewSet):
+class ProjectsViewSet(BulkModelViewSet):
     """
-    Navi api set, for add,delete,update,list,retrieve resource
+    Projects api set, for add,delete,update,list,retrieve resource
     """
-    queryset = Navi.objects.all()
-    serializer_class = serializers.NaviSerializer
+    queryset = Projects.objects.all()
+    serializer_class = serializers.ProjectsSerializer
     permission_classes = (IsSuperUserOrAppUser,)
 
-class NaviUpdateGroupApi(generics.RetrieveUpdateAPIView):
-    queryset = Navi.objects.all()
-    serializer_class = serializers.NaviUpdateGroupSerializer
+class ProjectsUpdateGroupApi(generics.RetrieveUpdateAPIView):
+    queryset = Projects.objects.all()
+    serializer_class = serializers.ProjectsUpdateGroupSerializer
     permission_classes = (IsSuperUser,)
 
-class NaviUpdateUserApi(generics.RetrieveUpdateAPIView):
-    queryset = Navi.objects.all()
-    serializer_class = serializers.NaviUpdateUserSerializer
+class ProjectsUpdateUserApi(generics.RetrieveUpdateAPIView):
+    queryset = Projects.objects.all()
+    serializer_class = serializers.ProjectsUpdateUserSerializer
     permission_classes = (IsSuperUser,)

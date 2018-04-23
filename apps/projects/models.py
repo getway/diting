@@ -17,7 +17,7 @@ from django.shortcuts import reverse
 class Projects(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     name = models.CharField(u"项目名", max_length=50)
-    dever = models.URLField(u"负责人")
+    dever = models.CharField(u"负责人", max_length=20)
     apps = models.TextField(u"组件", blank=True, default="")
     rely = models.TextField(u"依赖", blank=True, default="")
     date_created = models.DateTimeField(u"添加时间", default=timezone.now, editable=False)

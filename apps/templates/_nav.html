@@ -23,6 +23,16 @@
         <li id="navi"><a href="{% url 'navis:navi-list' %}">{% trans 'Navi list' %}</a></li>
     </ul>
 </li>
+
+<li id="projects">
+    <a>
+        <i class="fa fa-inbox" style="width: 14px"></i> <span class="nav-label">项目管理</span><span class="fa arrow"></span>
+    </a>
+    <ul class="nav nav-second-level">
+        <li id="project"><a href="{% url 'projects:projects-list' %}">项目列表</a></li>
+    </ul>
+</li>
+
 <li id="perms">
     <a href="#"><i class="fa fa-edit" style="width: 14px"></i> <span class="nav-label">{% trans 'Perms' %}</span><span class="fa arrow"></span></a>
 

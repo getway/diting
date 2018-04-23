@@ -10,3 +10,4 @@ apps/static/ionicons/
 *.pyc
 data/*
 config.py
+env/

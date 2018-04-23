@@ -16,7 +16,7 @@
                     <div class="panel-options">
                         <ul class="nav nav-tabs">
                             <li class="active">
-                                <a href="{% url 'projects:prjects-detail' pk=projects_object.id %}" class="text-center"><i class="fa fa-laptop"></i> {% trans 'User detail' %} </a>
+                                <a href="{% url 'projects:projects-detail' pk=projects_object.id %}" class="text-center"><i class="fa fa-laptop"></i> {% trans 'User detail' %} </a>
                             </li>
 
                             <li class="pull-right">
@@ -53,32 +53,32 @@
                                     <table class="table">
                                         <tbody>
                                         <tr>
-                                            <td width="20%">{% trans 'Name' %}:</td>
+                                            <td width="20%">项目名:</td>
                                             <td><b>{{ projects_object.name }}</b></td>
                                         </tr>
                                         <tr>
-                                            <td>{% trans 'Dever' %}:</td>
-                                            <td><b>{{ navi_object.dever }}</b></td>
+                                            <td>负责人:</td>
+                                            <td><b>{{ projects_object.dever }}</b></td>
                                         </tr>
                                         <tr>
                                             <td>{% trans 'Created by' %}:</td>
-                                            <td><b>{{ navi_object.created_by }}</b></td>
+                                            <td><b>{{ projects_object.created_by }}</b></td>
                                         </tr>
                                         <tr>
                                             <td>{% trans 'Date joined' %}:</td>
-                                            <td><b>{{ navi_object.date_created|date:"Y-m-j H:i:s" }}</b></td>
+                                            <td><b>{{ projects_object.date_created|date:"Y-m-j H:i:s" }}</b></td>
                                         </tr>
                                         <tr>
-                                            <td>{% trans 'Last updated' %}:</td>
-                                            <td><b>{{ navi_object.date_updated|date:"Y-m-j H:i:s" }}</b></td>
+                                            <td>更新时间:</td>
+                                            <td><b>{{ projects_object.date_updated|date:"Y-m-j H:i:s" }}</b></td>
                                         </tr>
                                         <tr>
-                                            <td>{% trans 'Apps' %}:</td>
-                                            <td><b>{{ navi_object.apps }}</b></td>
+                                            <td>组件:</td>
+                                            <td><b>{{ projects_object.apps }}</b></td>
                                         </tr>
                                             <tr>
-                                            <td>{% trans 'Rely' %}:</td>
-                                            <td><b>{{ navi_object.rely }}</b></td>
+                                            <td>依赖:</td>
+                                            <td><b>{{ projects_object.rely }}</b></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -110,7 +110,7 @@
                                             </tr>
                                         </form>
 
-                                        {% for user in navi_object.users.all %}
+                                        {% for user in projects_object.users.all %}
                                         <tr>
                                           <td >
                                               <b class="bdg_user" data-gid={{ user.id }}>{{ user.name }}</b>
@@ -149,7 +149,7 @@
                                             </tr>
                                         </form>
 
-                                        {% for group in navi_object.groups.all %}
+                                        {% for group in projects_object.groups.all %}
                                         <tr>
                                           <td >
                                               <b class="bdg_group" data-gid={{ group.id }}>{{ group.name }}</b>
@@ -176,7 +176,7 @@
 jumpserver.nodes_selected = {};
 
 function updateUsers(users) {
-    var the_url = "{% url 'api-navis:navi-update-user' pk=navi_object.id %}";
+    var the_url = "{% url 'api-projects:projects-update-user' pk=projects_object.id %}";
     var body = {
         users: Object.assign([], users)
     };
@@ -205,7 +205,7 @@ function updateUsers(users) {
 }
 
 function updateUserGroups(groups) {
-    var the_url = "{% url 'api-navis:navi-update-group' pk=navi_object.id %}";
+    var the_url = "{% url 'api-projects:projects-update-group' pk=projects_object.id %}";
     var body = {
         groups: Object.assign([], groups)
     };
@@ -250,7 +250,7 @@ $(document).ready(function() {
 
 
 .on('click', '#is_active', function() {
-    var the_url = "{% url 'api-navis:navi-detail' pk=navi_object.id %}";
+    var the_url = "{% url 'api-projects:projects-detail' pk=projects_object.id %}";
     var checked = $(this).prop('checked');
     var body = {
         'is_active': checked
@@ -331,10 +331,10 @@ $(document).ready(function() {
 
 .on('click', '.btn-delete-user', function () {
     var $this = $(this);
-    var name = "{{ navi_object.name }}";
-    var uid = "{{ navi_object.id }}";
-    var the_url = '{% url "api-navis:navi-detail" pk=DEFAULT_PK %}'.replace('{{ DEFAULT_PK }}', uid);
-    var redirect_url = "{% url 'navis:navi-list' %}";
+    var name = "{{ projects_object.name }}";
+    var uid = "{{ projects_object.id }}";
+    var the_url = '{% url "api-projects:projects-detail" pk=DEFAULT_PK %}'.replace('{{ DEFAULT_PK }}', uid);
+    var redirect_url = "{% url 'projects:projects-list' %}";
     objectDelete($this, name, the_url, redirect_url);
 })
 </script>

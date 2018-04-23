@@ -10,8 +10,8 @@
             <th class="text-center">
                 <input id="" type="checkbox" class="ipt_check_all">
             </th>
-            <th class="text-center">{% trans 'Name' %}</th>
-            <th class="text-center">{% trans 'Dever' %}</th>
+            <th class="text-center">项目名</th>
+            <th class="text-center">负责人</th>
             <th class="text-center">{% trans 'Action' %}</th>
         </tr>
     </thead>
@@ -59,9 +59,9 @@ function initTable() {
 
                 $(td).html(update_btn + del_btn)
              }}],
-        ajax_url: '{% url "api-navis:navi-list" %}',
+        ajax_url: '{% url "api-projects:projects-list" %}',
         columns: [
-            {data: "id"}, {data: "name" }, {data: "url" }, {data: "id" }
+            {data: "id"}, {data: "name" }, {data: "dever" }, {data: "id" }
         ],
         op_html: $('#actions').html()
     };
@@ -88,7 +88,7 @@ $(document).ready(function(){
     if (id_list === []) {
         return false;
     }
-    var the_url = "{% url 'api-navis:navi-list' %}";
+    var the_url = "{% url 'api-projects:projects-list' %}";
     function doDeactive() {
         var body = $.each(id_list, function(index, user_object) {
             user_object['is_active'] = false;
@@ -121,7 +121,7 @@ $(document).ready(function(){
     function doDelete() {
         swal({
             title: "{% trans 'Are you sure?' %}",
-            text: "{% trans 'This will delete the selected navis !!!' %}",
+            text: "{% trans 'This will delete the selected projects !!!' %}",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -129,13 +129,13 @@ $(document).ready(function(){
             closeOnConfirm: false
         }, function() {
             var success = function() {
-                var msg = "{% trans 'Navi Deleted.' %}";
-                swal("{% trans 'Navi Delete' %}", msg, "success");
+                var msg = "{% trans 'Projects Deleted.' %}";
+                swal("{% trans 'Projects Delete' %}", msg, "success");
                 $('#user_list_table').DataTable().ajax.reload();
             };
             var fail = function() {
-                var msg = "{% trans 'Navi Deleting failed.' %}";
-                swal("{% trans 'Navi Delete' %}", msg, "error");
+                var msg = "{% trans 'Projects Deleting failed.' %}";
+                swal("{% trans 'Projects Delete' %}", msg, "error");
             };
             var url_delete = the_url + '?id__in=' + JSON.stringify(plain_id_list);
             APIUpdateAttr({url: url_delete, method: 'DELETE', success: success, error: fail});
@@ -167,7 +167,7 @@ $(document).ready(function(){
     var $this = $(this);
     var name = $this.data('name');
     var uid = $this.data('uid');
-    var the_url = '{% url "api-navis:navi-detail" pk=DEFAULT_PK %}'.replace("{{ DEFAULT_PK }}", uid);
+    var the_url = '{% url "api-projects:projects-detail" pk=DEFAULT_PK %}'.replace("{{ DEFAULT_PK }}", uid);
     objectDelete($this, name, the_url);
 })
 </script>

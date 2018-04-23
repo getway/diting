@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'perms.apps.PermsConfig',
     'common.apps.CommonConfig',
     'navis.apps.NaviConfig',
+    'projects.apps.ProjectsConfig',
     'rest_framework',
     'rest_framework_swagger',
     'django_filters',

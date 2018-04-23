@@ -18,11 +18,13 @@ urlpatterns = [
     url(r'^settings/', include('common.urls.view_urls', namespace='settings')),
     url(r'^common/', include('common.urls.view_urls', namespace='common')),
     url(r'^navis/', include('navis.urls.view_urls', namespace='navis')),
+    url(r'^projects/', include('projects.urls.view_urls', namespace='projects')),
 
     # Api url view map
     url(r'^api/users/', include('users.urls.api_urls', namespace='api-users')),
     url(r'^api/common/', include('common.urls.api_urls', namespace='api-common')),
     url(r'^api/navis/', include('navis.urls.api_urls', namespace='api-navis')),
+    url(r'^api/projects/', include('projects.urls.api_urls', namespace='api-projects')),
 
     # External apps url
     url(r'^captcha/', include('captcha.urls')),
