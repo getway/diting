@@ -33,5 +33,9 @@ class Navi(models.Model):
     def get_absolute_url(self):
         return reverse('navis:navi-detail', args=(self.id,))
 
+    class Meta:
+        managed = True
+        ordering = ['name']
+
     # def get_absolute_url(self):
     #     return reverse('users:user-detail', args=(self.id,))

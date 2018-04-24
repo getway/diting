@@ -21,6 +21,7 @@ class UserGroup(NoDeleteModelMixin):
         return self.name
 
     class Meta:
+        managed = True
         ordering = ['name']
         verbose_name = _("User group")
 

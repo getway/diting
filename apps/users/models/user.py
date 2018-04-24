@@ -257,6 +257,7 @@ class User(AbstractUser):
         return super(User, self).delete()
 
     class Meta:
+        managed = True
         ordering = ['username']
         verbose_name = _("User")
 
