@@ -55,7 +55,7 @@ $ echo 'LANG=zh_CN.UTF-8' > /etc/sysconfig/i18n
 ### 3.2 准备 Python3 和 Python 虚拟环境
 ```shell
 #安装系统依赖
-$ yum -y install wget sqlite-devel xz gcc automake zlib-devel openssl-devel epel-release git
+$ yum -y install wget sqlite-devel xz gcc automake zlib-devel openssl-devel epel-release git python-ldap
 
 #安装python3.6
 $ wget https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tar.xz
@@ -81,6 +81,7 @@ $ cd diting
 $ pip install -r requirements/requirements.txt
 # 数据库迁移(初始化数据库)
 $ cd /opt/diting/utils
+$ python3 ../apps/manage.py makemigrations common users perms navis
 $ bash make_migrations.sh
 #导入数据
 $ cd /opt/diting/apps
