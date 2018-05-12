@@ -9,6 +9,7 @@
 
 from django import forms
 from .models import Navi
+from django.utils.translation import gettext_lazy as _
 
 
 class NaviCreateUpdateForm(forms.ModelForm):
@@ -27,8 +28,33 @@ class NaviCreateUpdateForm(forms.ModelForm):
         model = Navi
         exclude = ("id",)
 
+        help_texts = {
+            'name': '* required',
+            'username': '* required',
+        }
+        widgets = {
+            'groups': forms.SelectMultiple(
+                attrs={'class': 'select2',
+                       'data-placeholder': _('Select user groups')}),
+            'users': forms.SelectMultiple(
+                attrs={'class': 'select2',
+                       'data-placeholder': _('Select users')}),
+        }
+
 
 class NaviUpdateForm(forms.ModelForm):
     class Meta:
         model = Navi
         exclude = ("id",)
+
+        help_texts = {
+            'name': '* required',
+        }
+        widgets = {
+            'groups': forms.SelectMultiple(
+                attrs={'class': 'select2',
+                       'data-placeholder': _('Select user groups')}),
+            'users': forms.SelectMultiple(
+                attrs={'class': 'select2',
+                       'data-placeholder': _('Select users')}),
+        }

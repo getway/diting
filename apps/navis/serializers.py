@@ -21,6 +21,7 @@ class NaviSerializer(BulkSerializerMixin, serializers.ModelSerializer):
         fields = super(NaviSerializer, self).get_field_names(declared_fields, info)
         return fields
 
+
 class NaviPKUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Navi

@@ -39,6 +39,11 @@
                             {% bootstrap_field form.url layout="horizontal" %}
                             {% bootstrap_field form.description layout="horizontal" %}
 
+                            <div class="hr-line-dashed"></div>
+                            <h3>{% trans 'Group' %}</h3>
+                            {% bootstrap_field form.users layout="horizontal" %}
+                            {% bootstrap_field form.groups layout="horizontal" %}
+
                             <div class="form-group">
                                 <div class="col-sm-4 col-sm-offset-2">
                                     <button class="btn btn-white" type="reset">{% trans 'Reset' %}</button>

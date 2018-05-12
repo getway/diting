@@ -1,5 +1,12 @@
 {% extends '_base_list.html' %}
 {% load i18n static %}
+
+{% block help_message %}
+    <div class="alert alert-info help-message">
+    这里的导航-也就是应用，授权应用的用户和用户组，也就是授权哪些用户和用户组可以直接登录应用。
+    </div>
+{% endblock %}
+
 {% block table_search %}
 {% endblock %}
 {% block table_container %}
@@ -18,21 +25,21 @@
     <tbody>
     </tbody>
 </table>
-<div id="actions" class="hide">
-    <div class="input-group">
-        <select class="form-control m-b" style="width: auto" id="slct_bulk_update">
-            <option value="delete">{% trans 'Delete selected' %}</option>
-            <option value="update">{% trans 'Update selected' %}</option>
-            <option value="deactive">{% trans 'Deactive selected' %}</option>
-            <option value="active">{% trans 'Active selected' %}</option>
-        </select>
-        <div class="input-group-btn pull-left" style="padding-left: 5px;">
-            <button id='btn_bulk_update' style="height: 32px;"  class="btn btn-sm btn-primary">
-             {% trans 'Submit' %}
-            </button>
-        </div>
-    </div>
-</div>
+{#<div id="actions" class="hide">#}
+{#    <div class="input-group">#}
+        {#<select class="form-control m-b" style="width: auto" id="slct_bulk_update">#}
+        {#    <option value="delete">{% trans 'Delete selected' %}</option>  #}
+        {#    <option value="update">{% trans 'Update selected' %}</option>  #}
+        {#    <option value="deactive">{% trans 'Deactive selected' %}</option>#}
+        {#    <option value="active">{% trans 'Active selected' %}</option>#}
+        {#</select>#}
+{#        <div class="input-group-btn pull-left" style="padding-left: 5px;">#}
+{#            <button id='btn_bulk_update' style="height: 32px;"  class="btn btn-sm btn-primary">#}
+{#             {% trans 'Submit' %}#}
+{#            </button>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
 {% endblock %}
 {% block content_bottom_left %}{% endblock %}
 {% block custom_foot_js %}

@@ -16,7 +16,7 @@
 
 
 
-[![运维导航](docs/_static/img/dt-navis.png)](#)
+[![运维导航](docs/_static/img/dt-navis2.png)](#)
 
 [![导航列表](docs/_static/img/dt-navi-list.png)](#)
 
@@ -82,7 +82,7 @@ $ cd diting
 $ pip install -r requirements/requirements.txt
 # 数据库迁移(初始化数据库)
 $ cd /opt/diting/utils
-$ python3 ../apps/manage.py makemigrations common users perms navis
+$ python3 ../apps/manage.py makemigrations common users perms navis likes
 $ bash make_migrations.sh
 #导入数据
 $ cd /opt/diting/apps

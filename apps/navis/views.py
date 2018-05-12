@@ -8,29 +8,15 @@
 
 from users.models import User, UserGroup
 from .models import Navi
-from django.shortcuts import render
-from .forms import NaviCreateUpdateForm
-from django.contrib.auth.decorators import login_required
 from common.utils import get_logger, get_object_or_none, is_uuid, ssh_key_gen
-from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.cache import cache
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect
-from django.urls import reverse_lazy, reverse
-from django.utils import timezone
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext as _
-from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.generic.base import TemplateView
-from django.db import transaction
 from django.views.generic.edit import (
-    CreateView, UpdateView, FormMixin, FormView
+    CreateView, UpdateView
 )
 from django.views.generic.detail import DetailView, SingleObjectMixin
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import logout as auth_logout
 from .utils import AdminUserRequiredMixin
 from . import forms
 from common.const import create_success_msg, update_success_msg

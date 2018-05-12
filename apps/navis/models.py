@@ -28,14 +28,11 @@ class Navi(models.Model):
 
     def __unicode__(self):
         return self.name
+    __str__ = __unicode__
 
     # @models.permalink
     def get_absolute_url(self):
         return reverse('navis:navi-detail', args=(self.id,))
-
-    class Meta:
-        managed = True
-        ordering = ['name']
 
     # def get_absolute_url(self):
     #     return reverse('users:user-detail', args=(self.id,))

@@ -1,9 +1,36 @@
 {% extends 'base_no.html' %}
 {% load static %}
 {% block content %}
+{% load likes_tags %}
+{% block custom_head_css_js %}
+<style type="text/css">
+div.like {
+    color: #337ab7;
+    cursor: pointer;
+    padding: 0.5em 0.3em;
+}
+
+div.like .active{
+    color: #f22;
+}
+
+span.views_number,span.votes_number,span.dls_number,span.avatar_icon{
+	padding:0 5%;
+	font-size:12px;
+	font-weight:normal;
+	color:#5C5C5C;
+}
+span.views_number{
+	float: right;
+}
+span.votes_number{
+	float: left;
+}
+</style>
+{% endblock %}
 
 <div class="wrapper wrapper-content animated fadeInRight">
-        <div class="row">
+    <div class="row">
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
@@ -25,9 +52,19 @@
                             <ul class="gallery-list clearfix" style="padding-left: 10px">
                                 {% for navi in navis %}
                                 <li>
-                                    <div class="img" style="width:120px"><a href="{{ navi.url }}" target="_blank" rel="nofollow"><img src="{{ navi.logo.url }}" width="100%" alt="{{ navi.name }}"></a></div>
+                                    <div class="img" style="width:120px;height:45px" align="center">
+                                        <a href="{% url 'url-redirect' pk=navi.name %}" target="_blank" rel="nofollow">
+                                            <img src="{{ navi.logo.url }}" width="120px" height="35px" alt="{{ navi.name }}">
+                                        </a>
+                                    </div>
                                     <div class="description" style="padding-top: 79px; display: none; width:130px"><h2>{{ navi.name }}</h2><p>{{ navi.description }}</p></div>
+                                    <div class="like" >
+                                        <span class="views_number" title="已被浏览数"><i class="fa fa-eye"></i><span class="view-num">&nbsp;{% get_view_count navi %}</span></span>
+                                        <span onclick="likeChange(this,'{% get_content_type navi %}','{{ navi.pk }}')" class="votes_number" title="点赞数"><i class="fa fa-thumbs-o-up {% get_like_status navi %}"></i><span class="liked-num">{% get_like_count navi %}</span></span>
+                                    </div>
+
                                 </li>
+
                                 {% endfor %}
                             </ul>
                         </div>
@@ -35,7 +72,7 @@
                 </div>
             </div>
         </div>
-    </div>
+</div>
 
 {% endblock %}
 
@@ -50,9 +87,50 @@ $(function(){
 	},function(){ $(this).next('.description').stop(true,true).fadeOut('fast',function(){ $(this).parent().removeClass('active');});});
 	$('.gallery-list a').click(function(){
 		var href = $(this).attr('href');
-		countClick(href);
+		//countClick(href);
 	})
 })
+
+
+function likeChange(obj, content_type, object_id){
+            var is_like = obj.getElementsByClassName('active').length == 0
+            $.ajax({
+                url: "{% url "api-likes:like-change" %}",
+                type: 'GET',
+                data: {
+                    content_type: content_type,
+                    object_id: object_id,
+                    is_like: is_like
+                },
+                cache: false,
+                success: function(data){
+                    console.log(data)
+                    if(data['status']=='SUCCESS'){
+                        // 更新点赞状态
+                        var element = $(obj.getElementsByClassName('fa fa-thumbs-o-up'));
+                        console.log(element);
+                        if(is_like){
+                            element.addClass('active');
+                        }else{
+                            element.removeClass('active');
+                        }
+                        // 更新点赞数量
+                        var liked_num = $(obj.getElementsByClassName('liked-num'));
+                        //alert(data['liked_num']);
+                        liked_num.text(data['liked_num']);
+                    }else{
+                        if(data['code']==400){
+                            $('#login_modal').modal('show');
+                        }else{
+                            alert(data['message']);
+                        }
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr)
+                }
+            });
+        }
 </script>
 
 {% endblock %}

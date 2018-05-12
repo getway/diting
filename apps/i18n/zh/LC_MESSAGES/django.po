@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Jumpserver 0.3.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-21 18:55+0800\n"
+"POT-Creation-Date: 2018-05-12 11:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: ibuler <ibuler@qq.com>\n"
 "Language-Team: Jumpserver team<ibuler@qq.com>\n"
@@ -210,7 +210,7 @@ msgstr ""
 #: common/models.py:26 common/templates/common/terminal_setting.html:63
 #: common/templates/common/terminal_setting.html:81
 #: navis/templates/navis/navi_detail.html:61
-#: navis/templates/navis/navi_list.html:13 perms/models.py:92
+#: navis/templates/navis/navi_list.html:20 perms/models.py:92
 #: perms/templates/perms/asset_permission_detail.html:62
 #: perms/templates/perms/asset_permission_user.html:54 users/models/group.py:14
 #: users/models/user.py:35 users/templates/users/_select_user_modal.html:13
@@ -268,7 +268,7 @@ msgstr "LDAP设置"
 #: common/templates/common/email_setting.html:56
 #: common/templates/common/ldap_setting.html:56
 #: common/templates/common/terminal_setting.html:97
-#: navis/templates/navis/navi_create_update.html:44
+#: navis/templates/navis/navi_create_update.html:49
 #: perms/templates/perms/asset_permission_create_update.html:71
 #: users/templates/users/_user.html:47
 #: users/templates/users/ldap_user_update.html:24
@@ -285,8 +285,7 @@ msgstr "重置"
 #: common/templates/common/email_setting.html:57
 #: common/templates/common/ldap_setting.html:57
 #: common/templates/common/terminal_setting.html:99
-#: navis/templates/navis/navi_create_update.html:45
-#: navis/templates/navis/navi_list.html:31
+#: navis/templates/navis/navi_create_update.html:50
 #: perms/templates/perms/asset_permission_create_update.html:72
 #: users/templates/users/_user.html:48
 #: users/templates/users/first_login.html:62
@@ -321,6 +320,32 @@ msgstr "系统设置"
 msgid "Update setting successfully, please restart program"
 msgstr "更新设置成功, 请手动重启程序"
 
+#: likes/models.py:35 perms/templates/perms/asset_permission_user.html:55
+#: users/forms.py:36 users/models/authentication.py:45 users/models/user.py:34
+#: users/templates/users/_select_user_modal.html:14
+#: users/templates/users/ldap_user_list.html:24
+#: users/templates/users/login.html:56
+#: users/templates/users/login_log_list.html:49
+#: users/templates/users/user_detail.html:64
+#: users/templates/users/user_list.html:24
+#: users/templates/users/user_profile.html:47
+msgid "Username"
+msgstr "用户名"
+
+#: likes/models.py:39
+msgid "Message"
+msgstr ""
+
+#: navis/forms.py:38 navis/forms.py:56
+#: perms/templates/perms/asset_permission_user.html:116
+msgid "Select user groups"
+msgstr "选择用户组"
+
+#: navis/forms.py:41 navis/forms.py:59 users/forms.py:344 users/forms.py:349
+#: users/forms.py:361 users/forms.py:391
+msgid "Select users"
+msgstr "选择用户"
+
 #: navis/models.py:25 navis/templates/navis/navi_detail.html:74
 #: perms/models.py:98 perms/templates/perms/asset_permission_detail.html:94
 #: users/models/user.py:51 users/templates/users/user_detail.html:96
@@ -329,7 +354,7 @@ msgstr "创建者"
 
 #: navis/models.py:26 perms/forms.py:21 perms/models.py:96
 #: perms/templates/perms/asset_permission_list.html:68 templates/_nav.html:17
-#: users/models/group.py:25 users/models/user.py:37
+#: users/models/group.py:26 users/models/user.py:37
 #: users/templates/users/_select_user_modal.html:16
 #: users/templates/users/user_detail.html:176
 #: users/templates/users/user_list.html:26
@@ -337,11 +362,15 @@ msgid "User group"
 msgstr "用户组"
 
 #: navis/models.py:27 perms/models.py:94 users/forms.py:387
-#: users/models/user.py:30 users/models/user.py:261
+#: users/models/user.py:30 users/models/user.py:262
 #: users/templates/users/user_group_detail.html:78
 #: users/templates/users/user_group_list.html:13 users/views/user.py:439
 msgid "User"
 msgstr "用户"
+
+#: navis/templates/navis/navi_create_update.html:43
+msgid "Group"
+msgstr "授权用户或用户组"
 
 #: navis/templates/navis/navi_detail.html:19
 #: users/templates/users/ldap_user_detail.html:19
@@ -351,7 +380,7 @@ msgid "User detail"
 msgstr "用户详情"
 
 #: navis/templates/navis/navi_detail.html:23
-#: navis/templates/navis/navi_list.html:52
+#: navis/templates/navis/navi_list.html:59
 #: perms/templates/perms/asset_permission_detail.html:30
 #: perms/templates/perms/asset_permission_list.html:121
 #: users/templates/users/ldap_user_detail.html:22
@@ -366,7 +395,7 @@ msgid "Update"
 msgstr "更新"
 
 #: navis/templates/navis/navi_detail.html:28
-#: navis/templates/navis/navi_list.html:56
+#: navis/templates/navis/navi_list.html:63
 #: perms/templates/perms/asset_permission_detail.html:34
 #: perms/templates/perms/asset_permission_list.html:122
 #: users/templates/users/ldap_user_detail.html:27
@@ -387,7 +416,7 @@ msgid "Logo"
 msgstr "注销登录"
 
 #: navis/templates/navis/navi_detail.html:69
-#: navis/templates/navis/navi_list.html:14
+#: navis/templates/navis/navi_list.html:21
 msgid "Url"
 msgstr ""
 
@@ -429,11 +458,11 @@ msgstr "授权用户组"
 msgid "Update successfully!"
 msgstr "更新成功"
 
-#: navis/templates/navis/navi_list.html:6
+#: navis/templates/navis/navi_list.html:13
 msgid "Create navi"
 msgstr "创建导航"
 
-#: navis/templates/navis/navi_list.html:15
+#: navis/templates/navis/navi_list.html:22
 #: perms/templates/perms/asset_permission_list.html:72
 #: users/templates/users/ldap_user_list.html:28
 #: users/templates/users/user_group_list.html:15
@@ -441,32 +470,8 @@ msgstr "创建导航"
 msgid "Action"
 msgstr "动作"
 
-#: navis/templates/navis/navi_list.html:24
-#: users/templates/users/ldap_user_list.html:37
-#: users/templates/users/user_list.html:38
-msgid "Delete selected"
-msgstr "批量删除"
-
-#: navis/templates/navis/navi_list.html:25
-#: users/templates/users/ldap_user_list.html:38
-#: users/templates/users/user_list.html:39
-msgid "Update selected"
-msgstr "批量更新"
-
-#: navis/templates/navis/navi_list.html:26
-#: users/templates/users/ldap_user_list.html:39
-#: users/templates/users/user_list.html:40
-msgid "Deactive selected"
-msgstr "禁用所选"
-
-#: navis/templates/navis/navi_list.html:27
-#: users/templates/users/ldap_user_list.html:40
-#: users/templates/users/user_list.html:41
-msgid "Active selected"
-msgstr "激活所选"
-
-#: navis/templates/navis/navi_list.html:123
-#: users/templates/users/ldap_user_list.html:188
+#: navis/templates/navis/navi_list.html:130
+#: users/templates/users/ldap_user_list.html:189
 #: users/templates/users/user_detail.html:331
 #: users/templates/users/user_detail.html:356
 #: users/templates/users/user_group_list.html:81
@@ -474,12 +479,12 @@ msgstr "激活所选"
 msgid "Are you sure?"
 msgstr "你确认吗?"
 
-#: navis/templates/navis/navi_list.html:124
+#: navis/templates/navis/navi_list.html:131
 msgid "This will delete the selected navis !!!"
 msgstr "删除选择导航"
 
-#: navis/templates/navis/navi_list.html:128 templates/_modal.html:16
-#: users/templates/users/ldap_user_list.html:193
+#: navis/templates/navis/navi_list.html:135 templates/_modal.html:16
+#: users/templates/users/ldap_user_list.html:194
 #: users/templates/users/user_detail.html:336
 #: users/templates/users/user_detail.html:361
 #: users/templates/users/user_detail.html:384
@@ -490,37 +495,37 @@ msgstr "删除选择导航"
 msgid "Confirm"
 msgstr "确认"
 
-#: navis/templates/navis/navi_list.html:132
+#: navis/templates/navis/navi_list.html:139
 msgid "Navi Deleted."
 msgstr "已被删除"
 
-#: navis/templates/navis/navi_list.html:133
-#: navis/templates/navis/navi_list.html:138
+#: navis/templates/navis/navi_list.html:140
+#: navis/templates/navis/navi_list.html:145
 msgid "Navi Delete"
 msgstr "删除"
 
-#: navis/templates/navis/navi_list.html:137
+#: navis/templates/navis/navi_list.html:144
 msgid "Navi Deleting failed."
 msgstr "导航删除失败"
 
-#: navis/views.py:47 navis/views.py:62 navis/views.py:81 navis/views.py:95
+#: navis/views.py:33 navis/views.py:48 navis/views.py:67 navis/views.py:81
 #: templates/_nav.html:23
 msgid "Navis"
 msgstr "导航管理"
 
-#: navis/views.py:48 perms/models.py:93
+#: navis/views.py:34 perms/models.py:93
 msgid "Navi"
 msgstr "导航"
 
-#: navis/views.py:62
+#: navis/views.py:48
 msgid "Create Navi"
 msgstr "创建导航"
 
-#: navis/views.py:81
+#: navis/views.py:67
 msgid "Update navi"
 msgstr "更新导航"
 
-#: navis/views.py:96
+#: navis/views.py:82
 msgid "Navi detail"
 msgstr "导航详情"
 
@@ -655,18 +660,6 @@ msgstr "激活"
 msgid "User list of "
 msgstr "用户列表"
 
-#: perms/templates/perms/asset_permission_user.html:55 users/forms.py:36
-#: users/models/authentication.py:45 users/models/user.py:34
-#: users/templates/users/_select_user_modal.html:14
-#: users/templates/users/ldap_user_list.html:24
-#: users/templates/users/login.html:56
-#: users/templates/users/login_log_list.html:49
-#: users/templates/users/user_detail.html:64
-#: users/templates/users/user_list.html:24
-#: users/templates/users/user_profile.html:47
-msgid "Username"
-msgstr "用户名"
-
 #: perms/templates/perms/asset_permission_user.html:80
 msgid "Add user to asset permission"
 msgstr "添加用户"
@@ -679,10 +672,6 @@ msgstr "选择用户"
 #: perms/templates/perms/asset_permission_user.html:108
 msgid "Add user group to asset permission"
 msgstr "添加用户组"
-
-#: perms/templates/perms/asset_permission_user.html:116
-msgid "Select user groups"
-msgstr "选择用户组"
 
 #: perms/templates/perms/delete_confirm.html:6 templates/delete_confirm.html:6
 msgid "Confirm delete"
@@ -962,10 +951,6 @@ msgstr "复制你的公钥到这里"
 msgid "Public key"
 msgstr "ssh公钥"
 
-#: users/forms.py:344 users/forms.py:349 users/forms.py:361 users/forms.py:391
-msgid "Select users"
-msgstr "选择用户"
-
 #: users/models/authentication.py:36
 msgid "Private Token"
 msgstr "ssh密钥"
@@ -990,7 +975,7 @@ msgstr "Agent"
 msgid "Date login"
 msgstr "登录日期"
 
-#: users/models/user.py:29 users/models/user.py:269
+#: users/models/user.py:29 users/models/user.py:270
 msgid "Administrator"
 msgstr "管理员"
 
@@ -1025,11 +1010,11 @@ msgstr "二次验证"
 msgid "Private key"
 msgstr "ssh私钥"
 
-#: users/models/user.py:272
+#: users/models/user.py:273
 msgid "Administrator is the super user of system"
 msgstr "Administrator是初始的超级管理员"
 
-#: users/models/user.py:273
+#: users/models/user.py:274
 msgid "System"
 msgstr "系统"
 
@@ -1139,24 +1124,44 @@ msgstr "创建用户"
 msgid "Is Imported"
 msgstr "是否被导入"
 
-#: users/templates/users/ldap_user_list.html:189
+#: users/templates/users/ldap_user_list.html:37
+#: users/templates/users/user_list.html:38
+msgid "Delete selected"
+msgstr "批量删除"
+
+#: users/templates/users/ldap_user_list.html:38
+#: users/templates/users/user_list.html:39
+msgid "Update selected"
+msgstr "批量更新"
+
+#: users/templates/users/ldap_user_list.html:39
+#: users/templates/users/user_list.html:40
+msgid "Deactive selected"
+msgstr "禁用所选"
+
+#: users/templates/users/ldap_user_list.html:40
+#: users/templates/users/user_list.html:41
+msgid "Active selected"
+msgstr "激活所选"
+
+#: users/templates/users/ldap_user_list.html:190
 #: users/templates/users/user_list.html:200
 msgid "This will delete the selected users !!!"
 msgstr "删除选中用户 !!!"
 
-#: users/templates/users/ldap_user_list.html:197
+#: users/templates/users/ldap_user_list.html:198
 #: users/templates/users/user_list.html:208
 msgid "User Deleted."
 msgstr "已被删除"
 
-#: users/templates/users/ldap_user_list.html:198
-#: users/templates/users/ldap_user_list.html:203
+#: users/templates/users/ldap_user_list.html:199
+#: users/templates/users/ldap_user_list.html:204
 #: users/templates/users/user_list.html:209
 #: users/templates/users/user_list.html:214
 msgid "User Delete"
 msgstr "删除"
 
-#: users/templates/users/ldap_user_list.html:202
+#: users/templates/users/ldap_user_list.html:203
 #: users/templates/users/user_list.html:213
 msgid "User Deleting failed."
 msgstr "用户删除失败"

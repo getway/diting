@@ -22,6 +22,7 @@ class NaviViewSet(BulkModelViewSet):
     serializer_class = serializers.NaviSerializer
     permission_classes = (IsSuperUserOrAppUser,)
 
+
 class NaviUpdateGroupApi(generics.RetrieveUpdateAPIView):
     queryset = Navi.objects.all()
     serializer_class = serializers.NaviUpdateGroupSerializer
