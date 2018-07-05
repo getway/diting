@@ -66,7 +66,7 @@ $ ./configure && make && make install
 
 # 使用虚拟环境
 $ /usr/local/bin/python3.6 -m venv /opt/venv3
-$ source /opt/venv3/bin/active
+$ source /opt/venv3/bin/activate
 #注意：当出现(venv3)时候，表示虚拟环境生成成功
 $ (venv3) [root@xxx xxx]#
 ```
