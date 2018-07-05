@@ -80,6 +80,8 @@ $ git clone https://github.com/getway/diting.git
 $ cd diting
 # 安装依赖
 $ pip install -r requirements/requirements.txt
+#配置数据库以及redis  自行更改config.py
+
 # 数据库迁移(初始化数据库)
 $ cd /opt/diting/utils
 $ python3 ../apps/manage.py makemigrations common users perms navis likes
