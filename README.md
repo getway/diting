@@ -1,7 +1,9 @@
 ## Diting 谛听系统
 目标：让运维更简单
 
-目前在jumpserver的框架下，开始项目
+目前在jumpserver的框架下，开始项目(还有一版融合了最新版的jumpserver - [jumpserver-ldap-manager](https://github.com/getway/jumpserver-ldap-manager)
+有堡垒机功能和谛听的功能，欢迎体验。
+
 ### 1 当前功能：
 * 用户管理-用户增删改查
 * 运维导航-快速链接、导航面板管理-增删改查
