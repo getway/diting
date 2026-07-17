@@ -8,7 +8,7 @@ import base64
 import os
 from itertools import chain
 import logging
-import datetime
+from datetime import datetime, timezone
 import time
 import hashlib
 from email.utils import formatdate
@@ -122,7 +122,7 @@ def timesince(dt, since='', default="just now"):
     """
 
     if since is '':
-        since = datetime.datetime.utcnow()
+        since = datetime.now(timezone.utc)
 
     if since is None:
         return default
