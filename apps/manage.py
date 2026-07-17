@@ -5,9 +5,7 @@ import errno
 
 if __name__ == "__main__":
     try:
-        os.makedirs('../logs')
-    except:
-        pass
+        os.makedirs('../logs', exist_ok=True)
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "diting.settings")
     try:
